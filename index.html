@@ -226,7 +226,7 @@
                 <img src="static/images/method.pdf" alt="" style="width: 100%; max-width: 500px; padding-top: 10px;"/>
                 <p style="width: 100%; max-width: 800px; margin: auto;">
                 <i> 
-                  Given an input image I, two augmentations τ1 and τ2 are applied to create two different views, which are processed by the teacher and student encoders, φt and φs respectively. The teacher encoder is updated using Exponential Moving Average (EMA). The encoded features are then aligned using ROI Align and compared with reference features Fr obtained by applying φs to other batch images. Next, pairwise distances Dij between Fs and Fr , as well as between Ft and Fr , are computed using cosine similarity. These distances are then sorted using differentiable sorting and utilized to force nearest order consistency through NeCo loss.
+                  Given an input image \(I\), two augmentations \(\tau_1\) and \(\tau_2\) are applied to create two different views, which are processed by the teacher and student encoders, \(\phi_t\) and \(\phi_s\) respectively. The teacher encoder is updated using Exponential Moving Average (EMA). The encoded features are then aligned using ROI Align and compared with reference features \(F_r\) obtained by applying \(\phi_s\) to other batch images. Next, pairwise distances \(D_{ij}\) between \(F_s\) and \(F_r\), as well as between \(F_t\) and \(F_r\), are computed using cosine similarity. These distances are then sorted using differentiable sorting and utilized to force nearest order consistency through NeCo loss.
                 </i>
                 </p>
               </div>
@@ -254,9 +254,9 @@
               With these targets, we formulate our loss objective as a symmetric prediction task, where the features from each branch -- the video model and the projection network -- cross-predict the cluster assignment of the other. By doing so, we force the features of space-time tubes to be expressed by a limited number of clusters, enforcing semantic-rich concepts, while eliminating the dependency on predefined targets such as the masked pixel values, commonly used in prior works. Moreover, despite our cross-prediction task, we do not rely on any augmentations or crops, making our model stable and easy to train.
             </p>
             <div class="columns is-centered has-text-centered" style="display: block;">
-              <img src="static/images/method.jpg" alt="SIGMA" style="width: 100%; max-width: 1000px; padding-top: 10px;"/>
+              <img src="static/images/method.pdf" alt="SIGMA" style="width: 100%; max-width: 1000px; padding-top: 10px;"/>
               <p style="width: 100%; max-width: 1000px; margin: auto;">
-                <i>Overview of our proposed method SIGMA. A given video is embedded with the projection network \(\varphi\) leading to features \(\mathbf{x}^{\varphi}\). The video model \(\Psi\) predicts feature embeddings \(\mathbf{x}^\Psi\) of the masked space-time tubes. Both embeddings are projected onto the learnable prototypes \( \mathbf{C}\) representing cluster centroids. Cluster assignments are created with an adapted Sinkhorn algorithm enforcing equipartition across all prototypes. These pseudo-labels are then used as targets for the predictive task \(\mathcal{L}_{CE}\) with which the networks are optimized.
+                <i>Given an input image \(I\), two augmentations \(\tau_1\) and \(\tau_2\) are applied to create two different views, which are processed by the teacher and student encoders, \(\phi_t\) and \(\phi_s\) respectively. The teacher encoder is updated using Exponential Moving Average (EMA). The encoded features are then aligned using ROI Align and compared with reference features \(F_r\) obtained by applying \(\phi_s\) to other batch images. Next, pairwise distances \(D_{ij}\) between \(F_s\) and \(F_r\), as well as between \(F_t\) and \(F_r\), are computed using cosine similarity. These distances are then sorted using differentiable sorting and utilized to force nearest order consistency through NeCo loss.
               </p>
               &nbsp;
             </div>
