@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+  .content-wrapper {
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: -10rem;
+    border-radius: 0px;
+  }
+</style>
+
+<head>
+    <meta charset="utf-8">
+    <!-- existing meta tags -->
+    <!-- Google Analytics script goes here -->
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VQ4DE03DC3"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-VQ4DE03DC3');
+  </script>
+</head>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
+  <!-- Replace the content tag with appropriate information -->
+  <meta name="description" content="SIGMA Project Page">
+  <meta property="og:title" content="SIGMA: Sinkhorn-Guided Masked Video Modeling"/>
+  <meta property="og:description" content="Project page of 'SIGMA: Sinkhorn-Guided Masked Video Modeling'"/>
+  <meta property="og:url" content="https://quva-lab.github.io/SIGMA/"/>
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X630-->
+  <meta property="og:image" content="static/images/first.png" />
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="600"/>
+
+
+  <meta name="twitter:title" content="SIGMA: Sinkhorn-Guided Masked Video Modeling">
+  <meta name="twitter:description" content="">
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X600-->
+  <meta name="twitter:image" content="static/images/first.png">
+  <meta name="twitter:card" content="SIGMA: Sinkhorn-Guided Masked Video Modeling.">
+  <!-- Keywords for your paper to be indexed by-->
+  <meta name="keywords" content="VLMs, object localisation">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <title>SIGMA: Sinkhorn-Guided Masked Video Modeling</title>
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+  rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+  <script src="static/js/index.js"></script>
+</head>
+<body>
+
+
+  <section class="hero">
+    <!-- <div class="hero-body" style="background-color: #bdbaba;"> -->
+        <div class="hero-body" style="background-image: url('static/images/sigma_pattern_high_dpi.jpg'); background-size: cover; background-repeat: no-repeat; background-position: center center;">
+            <!-- <div class="hero-body" style="background-image: url(static/images/sigma_pattern_high_dpi.jpg);"> -->
+
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <div class="content-wrapper">
+            <h1 class="title is-1 publication-title">SIGMA: Sinkhorn-Guided Masked 
+              <br>
+              Video Modeling</h1>
+            <div class="is-size-5 publication-authors">
+              <!-- Paper authors -->
+              <b>
+              <span class="author-block">
+                <a href="https://smsd75.github.io/" target="_blank">Mohammadreza Salehi*</a>
+              </span>
+              <span class="author-block">
+                <a href="https://mdorkenwald.com/" target="_blank">Michael Dorkenwald*</a>,
+              </span>
+              <span class="author-block">
+                <a href="https://fmthoker.github.io//" target="_blank">Fida Mohammad Thoker*</a>,
+              </span>
+              <br>
+              <span class="author-block">
+                <a href="https://www.egavves.com/" target="_blank">Efstratios Gavves</a>,
+              </span>
+              <span class="author-block">
+                <a href="https://www.ceessnoek.info/" target="_blank">Cees Snoek</a>,
+              </span>
+              <span class="author-block">
+                <a href="https://yukimasano.github.io/" target="_blank">Yuki M. Asano</a>
+              </span>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block" style="color: red;">Accepted to ECCV'24</span><br>
+           
+            <span class="author-block">University of Amsterdam<br>
+            <span style="font-size: small;">*equal contribution</span>
+          </b>
+            </span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- Arxiv PDF link -->
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2407.15447" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                  </a>
+                </span>
+
+                <!-- Supplementary PDF link -->
+                <!-- <span class="link-block">
+                  <a href="static/pdfs/supplementary_material.pdf" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Supplementary</span>
+                  </a>
+                </span> -->
+
+                <!-- Github link -->
+                <!-- <span class="link-block">
+                  <a href="https://colab.research.google.com/github/phlippe/BISCUIT/blob/main/demo.ipynb" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <svg style="color: white" role="img" height="100px" width="100px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M16.9414 4.9757a7.033 7.033 0 0 0-4.9308 2.0646 7.033 7.033 0 0 0-.1232 9.8068l2.395-2.395a3.6455 3.6455 0 0 1 5.1497-5.1478l2.397-2.3989a7.033 7.033 0 0 0-4.8877-1.9297zM7.07 4.9855a7.033 7.033 0 0 0-4.8878 1.9316l2.3911 2.3911a3.6434 3.6434 0 0 1 5.0227.1271l1.7341-2.9737-.0997-.0802A7.033 7.033 0 0 0 7.07 4.9855zm15.0093 2.1721l-2.3892 2.3911a3.6455 3.6455 0 0 1-5.1497 5.1497l-2.4067 2.4068a7.0362 7.0362 0 0 0 9.9456-9.9476zM1.932 7.1674a7.033 7.033 0 0 0-.002 9.6816l2.397-2.397a3.6434 3.6434 0 0 1-.004-4.8916zm7.664 7.4235c-1.38 1.3816-3.5863 1.411-5.0168.1134l-2.397 2.395c2.4693 2.3328 6.263 2.5753 9.0072.5455l.1368-.1115z" fill="white"></path></svg>
+                  </span>
+                  <span>Demo</span>
+                  </a>
+                </span> -->
+
+                <!-- Github link -->
+                <span class="link-block">
+                  <a href="https://github.com/QUVA-Lab/SIGMA/" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+                </span>
+
+                <!-- Dataset link
+                <span class="link-block">
+                  <a href="https://zenodo.org/record/8027138" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="ai ai-zenodo"></i>
+                  </span>
+                  <span>Datasets</span>
+                  </a>
+                </span> -->
+
+                <!-- ArXiv abstract Link -->
+                <!-- <span class="link-block">
+                  <a href="https://arxiv.org/abs/<ARXIV PAPER ID>" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                  </a>
+                </span> -->
+              </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Teaser video-->
+  <!-- <section class="hero teaser" style="background-color: #fff6e6;">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <video poster="" id="tree" autoplay controls muted loop height="100%" style="background-color: white; padding: 30px;">
+          <source src="static/videos/banner_video.mov"
+          type="video/mp4">
+        </video>
+        <h2 class="subtitle has-text-centered">
+          <b>BISCUIT</b> learns causal variables from interactivate environments with low-level action information.
+        </h2>
+      </div>
+    </div>
+  </section> -->
+  <!-- End teaser video -->
+
+  <!-- Paper abstract -->
+  <section class="section hero">
+    <div class="container is-max-desktop">
+        
+      <div class="columns is-centered has-text-centered">
+        
+        <div class="column is-four-fifths">
+
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              Video-based pretraining offers immense potential for learning strong visual representations on an unprecedented scale. 
+              Recently, masked video modeling methods have shown promising scalability, yet fall short in capturing higher-level semantics due to reconstructing predefined low-level targets such as pixels. 
+              To tackle this, we present Sinkhorn-guided Masked Video Modelling (SIGMA), a novel video pretraining method that jointly learns the video model in addition to a target feature space using a projection network. However, this simple modification means that the regular L2 reconstruction loss will lead to trivial solutions as both networks are jointly optimized. As a solution, we distribute features of space-time tubes evenly across a limited number of learnable clusters. By posing this as an optimal transport problem, we enforce high entropy in the generated features across the batch, infusing semantic and temporal meaning into the feature space. The resulting cluster assignments are used as targets for a symmetric prediction task where the video model predicts cluster assignment of the projection network and vice versa. 
+              Experimental results on ten datasets across three benchmarks validate the effectiveness of SIGMA in learning more performant, temporally-aware, and robust video representations improving upon state-of-the-art methods.
+              <div class="columns is-centered has-text-centered" style="display: block;">
+                <img src="static/images/fig1.png" alt="" style="width: 100%; max-width: 500px; padding-top: 10px;"/>
+                <p style="width: 100%; max-width: 600px; margin: auto;">
+                <i> 
+                  Compared to VideoMAE, which uses RGB pixels as targets, we generate Sinkhorn-regularised features as reconstruction targets. This obtains more semantic features and yields better pretraining performance.
+                </i>
+                </p>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End paper abstract -->
+
+
+  <!-- Start second section -->
+  <section class="section hero">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <h2 class="title is-3">Methodology </h2>
+          <div class="content has-text-justified">
+            <p>
+              In this work, we propose a new framework wherein the typically predefined reconstruction target space can be simultaneously learned alongside the video model. 
+              For this, a projection network is introduced which embeds both the visible and masked portions of the video, yielding deep feature reconstruction targets. However, employing a commonly used L2 reconstruction loss naïvely is ineffective due to the joint optimization of both networks leading to a trivial solution as both networks collapse to the same output irrespective of the input.
+              To solve this, we introduce SIGMA: Sinkhorn-guided masked video modeling, where deep features of space-time tubes are regularised by optimal transport uniformly across clusters.
+              This effectively acts as a high-entropy regularization constraint and enforces similar space-time tube features to be assigned to the same centroid, infusing semantic meaning into the feature space.
+              These cluster assignments and centroids are learned in an online manner using the fast Sinhkhorn-Knopp algorithm, yielding feature pseudo-labels as targets. 
+              With these targets, we formulate our loss objective as a symmetric prediction task, where the features from each branch -- the video model and the projection network -- cross-predict the cluster assignment of the other. By doing so, we force the features of space-time tubes to be expressed by a limited number of clusters, enforcing semantic-rich concepts, while eliminating the dependency on predefined targets such as the masked pixel values, commonly used in prior works. Moreover, despite our cross-prediction task, we do not rely on any augmentations or crops, making our model stable and easy to train.
+            </p>
+            <div class="columns is-centered has-text-centered" style="display: block;">
+              <img src="static/images/method.jpg" alt="SIGMA" style="width: 100%; max-width: 1000px; padding-top: 10px;"/>
+              <p style="width: 100%; max-width: 1000px; margin: auto;">
+                <i>Overview of our proposed method SIGMA. A given video is embedded with the projection network \(\varphi\) leading to features \(\mathbf{x}^{\varphi}\). The video model \(\Psi\) predicts feature embeddings \(\mathbf{x}^\Psi\) of the masked space-time tubes. Both embeddings are projected onto the learnable prototypes \( \mathbf{C}\) representing cluster centroids. Cluster assignments are created with an adapted Sinkhorn algorithm enforcing equipartition across all prototypes. These pseudo-labels are then used as targets for the predictive task \(\mathcal{L}_{CE}\) with which the networks are optimized.
+              </p>
+              &nbsp;
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End second section -->
+
+
+  <!-- Start first section -->
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <h2 class="title is-3">Results</h2>
+          <div class="content has-text-justified">
+            <p>
+              We evaluate our method on a total of ten different datasets and across three common benchmark settings. In Benchmark I we first compare our approach against state-of-the-art video models in a linear probing (frozen backbone) and the standard full finetuning setting. Then, in Benchmark II we benchmark the semantic spatial and temporal understanding by reporting unsupervised semantic segmentation performance and visualizing the segmentation masks. In Benchmark III we evaluate our approach on the SEVERE benchmark specifically designed to analyze the generalization performance of video models.
+            </p> 
+            <br>
+            <div class="columns is-centered has-text-centered">
+              <br>
+            <h2 class="title is-4">Benchmark I</h2>
+          </div>
+            <div class="columns is-centered has-text-centered" style="display: block;">
+              <img src="static/images/linear.png" alt="SIGMA" style="width: 60%; max-width: 1000px; padding-top: 10px"/>
+              <p style="width: 70%; max-width: 1000px; margin: auto; padding-bottom: 30px;">
+                  <i>
+                  <b>Frozen evaluation of masked video modeling methods.</b> A linear layer on top of the frozen ViT-B backbone is optimized. The ViT-B backbones are pretrained on Kinetics-400 (K400). SIGMA consistently outperforms previous masked video modeling works across all video and image datasets considerably.</i>
+              </p>
+            </div>
+            <div class="columns is-centered has-text-centered" style="display: block;">
+                <img src="static/images/ssv2.png" alt="SIGMA" style="width: 70%; max-width: 1000px; padding-top: 10px"/>
+                <p style="width: 80%; max-width: 1000px; margin: auto; padding-bottom: 30px;">
+                    <i>
+                      <b>Comparison for full finetuning on Something-Something V2 (SSv2).</b> The top part compromises supervised methods while the remaining methods are pretrained in a self-supervised manner. The middle section evaluates models trained on Kinetics 400 (K400) data for pretraining whereas the bottom part mainly used SSv2 data. We compare against previous methods pretrained on the ViT-Base backbone for 800 epochs. A full table with all previous works using also different pretraining setups is provided in the supplemental. M. Guid. denotes motion guidance such as optical flow used e.g. reconstructing targets or masking. Our method achieves state-of-the-art performance on SSv2 w/ and w/o motion guidance.
+                
+                    </i>
+                </p>
+              </div>
+              <div class="columns is-centered has-text-centered" style="display: block;">
+                <img src="static/images/kinetics.png" alt="SIGMA" style="width: 70%; max-width: 1000px; padding-top: 10px"/>
+                <p style="width: 80%; max-width: 1000px; margin: auto; padding-bottom: 30px;">
+                    <i>
+                     <b>Comparison for full finetuning on Kinetics 400 (K400).</b> We compare against previous methods for pretraining the ViT-Base backbone for 800 epochs on K400 and subsequently, fully finetuning the backbone with the K400 labels. A full table with all previous methods using also different setups is provided in the supplemental. M. Guid. denotes motion guidance such as optical flow used e.g. reconstructing targets or masking. Our method achieves state-of-the-art performance on K400.
+                    </i>
+                </p>
+              </div>
+              <br>
+              <div class="columns is-centered has-text-centered">
+                <br>
+              <h2 class="title is-4">Benchmark II</h2>
+            </div>
+              <div class="columns is-centered has-text-centered" style="display: block;">
+                <img src="static/images/segmentation2.jpg" alt="SIGMA" style="width: 70%; max-width: 1000px; padding-top: 10px"/>
+                <p style="width: 80%; max-width: 1000px; margin: auto; padding-bottom: 30px;">
+                    <i>
+                      <b>Unsupervised video object segmentation results on DAVIS.</b> We visualize the abilities of masked video modeling methods to produce temporally consistent semantic segmentation masks. For that, K-means with K=6 is applied to the space-time features that are extracted from each input clip, resulting in assigning each tube feature to a certain cluster. Then, the extracted cluster maps are resized to match the input size and overlayed on the input. 
+                      Sigma provides more coherent and consistent object cluster maps compared to other methods. This shows that our learned features have better temporal and spatial understanding.</i>
+                </p>
+              </div>
+              <div class="columns is-centered has-text-centered" style="display: block;">
+                <img src="static/images/segmentation.png" alt="SIGMA" style="width: 50%; max-width: 1000px; padding-top: 10px"/>
+                <p style="width: 80%; max-width: 1000px; margin: auto; padding-bottom: 30px;">
+                    <i>
+                      <b>Unsupervised video object segmentation.</b> We follow the evaluation protocol from TimeTuning and report mIoU for clustering and overclustering. SIGMA consistently achieves better results compared to other methods across different backbones and datasets. This shows that our method learns better semantic and temporal consistent features. The clip-length is set to 16 and 4 for DAVIS and YTVOS, respectively. For clustering, the Hungarian algorithm matches the unsupervised segmentation clusters (K) with the ground truth (GT) per clip. For overclustering, we use K=10. The matching protocol is greedy many-to-one, see Supplemental for details.  
+                    </i>
+                </p>
+              </div>
+              <br>
+              <div class="columns is-centered has-text-centered">
+                <br>
+              <h2 class="title is-4">Benchmark III</h2>
+            </div>
+              <div class="columns is-centered has-text-centered" style="display: block;">
+                <img src="static/images/severe.png" alt="SIGMA" style="width: 80%; max-width: 1000px; padding-top: 10px"/>
+                <p style="width: 90%; max-width: 1000px; margin: auto; padding-bottom: 30px;">
+                    <i>
+                      <b>SEVERE Generalization. </b>We evaluate masked video modeling methods for generalizability in domain shift, sample efficiency, action granularity, and task shift. SIGMA achieves strong generalization performance outperforming prior works across all configurations. We use the original severe codebase to evaluate the publicly available models for all the methods.
+                    </i>
+                </p>
+              </div>
+              <br>
+              <div class="columns is-centered has-text-centered">
+                <br>
+              <h2 class="title is-4">Visualizations</h2>
+            </div>
+              <div class="columns is-centered has-text-centered" style="display: block;">
+                <img src="static/images/prototypes.png" alt="SIGMA" style="width: 80%; max-width: 1000px; padding-top: 10px"/>
+                <p style="width: 90%; max-width: 1000px; margin: auto; padding-bottom: 30px;">
+                    <i>
+                    <b>Visualization of prototypes.</b> We visualize the 25 space-time tubes with the highest similarity to a particular prototype inside a video. For simplicity, we visualize the first patch inside the space-time tube. We observe that different prototypes attend to particular semantic parts of the video, as prototype 1 corresponds to the blue parts of the car.</i>
+                </p>
+              </div>
+              <div class="columns is-centered has-text-centered" style="display: block;">
+                <img src="static/images/prototypes2.jpg" alt="SIGMA" style="width: 80%; max-width: 1000px; padding-top: 10px"/>
+                <p style="width: 90%; max-width: 1000px; margin: auto; padding-bottom: 30px;">
+                    <i>
+                      <b>Visualization of prototypes (2).</b> We visualize the 25 space-time tubes with the highest similarity to a particular prototype inside a video. For simplicity, we visualize the first patch inside the space-time tube. We observe that different prototypes attend to particular semantic parts of the video, for example, prototype 1 corresponds to the person(s) in white.</i>
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End first section -->
+
+  <section class="section" id="BibTeX" style="background-color: #fafafa;">
+    <div class="container is-max-desktop content">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+        <h2 class="title">Want to learn more about SIGMA?</h2>
+        <p>Check out our paper and code!</p>
+        <div class="publication-links">
+          <!-- Arxiv PDF link -->
+          <span class="link-block">
+            <a href="https://arxiv.org/abs/2407.15447" target="_blank"
+            class="external-link button is-normal is-rounded is-dark">
+            <span class="icon">
+              <i class="fas fa-file-pdf"></i>
+            </span>
+            <span>Paper</span>
+            </a>
+          </span>
+
+          <!-- Supplementary PDF link -->
+          <!-- <span class="link-block">
+            <a href="static/pdfs/supplementary_material.pdf" target="_blank"
+            class="external-link button is-normal is-rounded is-dark">
+            <span class="icon">
+              <i class="fas fa-file-pdf"></i>
+            </span>
+            <span>Supplementary</span>
+            </a>
+          </span> -->
+
+          <!-- Github link -->
+          <!-- <span class="link-block">
+            <a href="https://colab.research.google.com/github/phlippe/BISCUIT/blob/main/demo.ipynb" target="_blank"
+            class="external-link button is-normal is-rounded is-dark">
+            <span class="icon">
+              <svg style="color: white" role="img" height="100px" width="100px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M16.9414 4.9757a7.033 7.033 0 0 0-4.9308 2.0646 7.033 7.033 0 0 0-.1232 9.8068l2.395-2.395a3.6455 3.6455 0 0 1 5.1497-5.1478l2.397-2.3989a7.033 7.033 0 0 0-4.8877-1.9297zM7.07 4.9855a7.033 7.033 0 0 0-4.8878 1.9316l2.3911 2.3911a3.6434 3.6434 0 0 1 5.0227.1271l1.7341-2.9737-.0997-.0802A7.033 7.033 0 0 0 7.07 4.9855zm15.0093 2.1721l-2.3892 2.3911a3.6455 3.6455 0 0 1-5.1497 5.1497l-2.4067 2.4068a7.0362 7.0362 0 0 0 9.9456-9.9476zM1.932 7.1674a7.033 7.033 0 0 0-.002 9.6816l2.397-2.397a3.6434 3.6434 0 0 1-.004-4.8916zm7.664 7.4235c-1.38 1.3816-3.5863 1.411-5.0168.1134l-2.397 2.395c2.4693 2.3328 6.263 2.5753 9.0072.5455l.1368-.1115z" fill="white"></path></svg>
+            </span>
+            <span>Demo</span>
+            </a>
+          </span> -->
+
+          <!-- Github link -->
+          <span class="link-block">
+            <a href="https://github.com/QUVA-Lab/SIGMA/" target="_blank"
+            class="external-link button is-normal is-rounded is-dark">
+            <span class="icon">
+              <i class="fab fa-github"></i>
+            </span>
+            <span>Code</span>
+            </a>
+          </span>
+
+          <!-- Dataset link
+          <span class="link-block">
+            <a href="https://zenodo.org/record/8027138" target="_blank"
+            class="external-link button is-normal is-rounded is-dark">
+            <span class="icon">
+              <i class="ai ai-zenodo"></i>
+            </span>
+            <span>Datasets</span>
+            </a>
+          </span> -->
+
+          <!-- ArXiv abstract Link -->
+          <!-- <span class="link-block">
+            <a href="https://arxiv.org/abs/<ARXIV PAPER ID>" target="_blank"
+            class="external-link button is-normal is-rounded is-dark">
+            <span class="icon">
+              <i class="ai ai-arxiv"></i>
+            </span>
+            <span>arXiv</span>
+            </a>
+          </span> -->
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+
+  <!--BibTex citation -->
+  <!-- <section class="section" id="BibTeX" style="background-color: #fafafa;">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre style="background-color: #f5f5f5;"><code>
+      @misc{dorkenwald2024pin,
+            title={PIN: Positional Insert Unlocks Object Localisation Abilities in VLMs}, 
+            author={Michael Dorkenwald and Nimrod Barazani and Cees G. M. Snoek and Yuki M. Asano},
+            year={2024},
+            eprint={2402.08657},
+            archivePrefix={arXiv},
+            primaryClass={cs.CV}
+      }
+      </code></pre>
+    </div>
+  </section> -->
+  <!--End BibTex citation -->
+
+
+    <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+
+            <p>
+              This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a>. This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+              Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+</body>
+</html>
