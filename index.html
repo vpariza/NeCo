@@ -29,27 +29,27 @@
   <meta charset="utf-8">
   <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
   <!-- Replace the content tag with appropriate information -->
-  <meta name="description" content="SIGMA Project Page">
-  <meta property="og:title" content="SIGMA: Sinkhorn-Guided Masked Video Modeling"/>
-  <meta property="og:description" content="Project page of 'SIGMA: Sinkhorn-Guided Masked Video Modeling'"/>
-  <meta property="og:url" content="https://quva-lab.github.io/SIGMA/"/>
+  <meta name="description" content="NeCo Project Page">
+  <meta property="og:title" content="NeCo: Improving DINOv2’s spatial representations in 16 GPU hours with Patch Neighbor Consistency"/>
+  <meta property="og:description" content="NeCo: Improving DINOv2’s spatial representations in 16 GPU hours with Patch Neighbor Consistency"/>
+  <meta property="og:url" content="https://vpariza.github.io/NeCo/"/>
   <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X630-->
   <meta property="og:image" content="static/images/first.png" />
   <meta property="og:image:width" content="1200"/>
   <meta property="og:image:height" content="600"/>
 
 
-  <meta name="twitter:title" content="SIGMA: Sinkhorn-Guided Masked Video Modeling">
+  <meta name="twitter:title" content="NeCo: Improving DINOv2’s spatial representations in 16 GPU hours with Patch Neighbor Consistency.">
   <meta name="twitter:description" content="">
   <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X600-->
   <meta name="twitter:image" content="static/images/first.png">
-  <meta name="twitter:card" content="SIGMA: Sinkhorn-Guided Masked Video Modeling.">
+  <meta name="twitter:card" content="NeCo: Improving DINOv2’s spatial representations in 16 GPU hours with Patch Neighbor Consistency.">
   <!-- Keywords for your paper to be indexed by-->
-  <meta name="keywords" content="VLMs, object localisation">
+  <meta name="keywords" content="Self-Supervised Learning, Hummingbird Evaluation, Vision In-Context Learning, DINOv2, DINO, NeCo, Representation Learning">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-  <title>SIGMA: Sinkhorn-Guided Masked Video Modeling</title>
+  <title>NeCo: Improving DINOv2’s spatial representations in 16 GPU hours with Patch Neighbor Consistency</title>
   <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
   rel="stylesheet">
@@ -81,27 +81,25 @@
         <div class="columns is-centered">
           <div class="column has-text-centered">
             <div class="content-wrapper">
-            <h1 class="title is-1 publication-title">SIGMA: Sinkhorn-Guided Masked 
+            <h1 class="title is-1 publication-title">NeCo: Improving DINOv2’s spatial representations 
               <br>
-              Video Modeling</h1>
+              in 16 GPU hours with Patch Neighbor Consistency
+            </h1>
             <div class="is-size-5 publication-authors">
               <!-- Paper authors -->
               <b>
-              <span class="author-block">
+                <span class="author-block">
+                  <a href="https://www.linkedin.com/in/valentinos-pariza/" target="_blank">Valentinos Pariza*</a>,
+                </span>
+                <span class="author-block">
                 <a href="https://smsd75.github.io/" target="_blank">Mohammadreza Salehi*</a>
               </span>
               <span class="author-block">
-                <a href="https://mdorkenwald.com/" target="_blank">Michael Dorkenwald*</a>,
-              </span>
-              <span class="author-block">
-                <a href="https://fmthoker.github.io//" target="_blank">Fida Mohammad Thoker*</a>,
+                <a href="https://gertjanburghouts.github.io/about/" target="_blank">Gertjan J. Burghouts</a>,
               </span>
               <br>
               <span class="author-block">
-                <a href="https://www.egavves.com/" target="_blank">Efstratios Gavves</a>,
-              </span>
-              <span class="author-block">
-                <a href="https://www.ceessnoek.info/" target="_blank">Cees Snoek</a>,
+                <a href="https://www.francescolocatello.com" target="_blank">Francesco Locatello</a>,
               </span>
               <span class="author-block">
                 <a href="https://yukimasano.github.io/" target="_blank">Yuki M. Asano</a>
@@ -119,7 +117,7 @@
               <div class="publication-links">
                 <!-- Arxiv PDF link -->
                 <span class="link-block">
-                  <a href="https://arxiv.org/abs/2407.15447" target="_blank"
+                  <a href="TODO: TO be added once the paper is placed in arxiv" target="_blank"
                   class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                     <i class="fas fa-file-pdf"></i>
@@ -152,7 +150,7 @@
 
                 <!-- Github link -->
                 <span class="link-block">
-                  <a href="https://github.com/QUVA-Lab/SIGMA/" target="_blank"
+                  <a href="https://github.com/vpariza/NeCo" target="_blank"
                   class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                     <i class="fab fa-github"></i>
@@ -219,15 +217,16 @@
           <h2 class="title is-3">Abstract</h2>
           <div class="content has-text-justified">
             <p>
-              Video-based pretraining offers immense potential for learning strong visual representations on an unprecedented scale. 
-              Recently, masked video modeling methods have shown promising scalability, yet fall short in capturing higher-level semantics due to reconstructing predefined low-level targets such as pixels. 
-              To tackle this, we present Sinkhorn-guided Masked Video Modelling (SIGMA), a novel video pretraining method that jointly learns the video model in addition to a target feature space using a projection network. However, this simple modification means that the regular L2 reconstruction loss will lead to trivial solutions as both networks are jointly optimized. As a solution, we distribute features of space-time tubes evenly across a limited number of learnable clusters. By posing this as an optimal transport problem, we enforce high entropy in the generated features across the batch, infusing semantic and temporal meaning into the feature space. The resulting cluster assignments are used as targets for a symmetric prediction task where the video model predicts cluster assignment of the projection network and vice versa. 
-              Experimental results on ten datasets across three benchmarks validate the effectiveness of SIGMA in learning more performant, temporally-aware, and robust video representations improving upon state-of-the-art methods.
+              We propose the sorting of patch representations across views as a novel self-supervised learning signal to improve pretrained representations. 
+              To this end, we introduce NeCo: Patch Neighbor Consistency, a novel training loss that enforces patch-level nearest neighbor consistency across a student and teacher model, relative to reference batches. 
+              Our method leverages a differentiable sorting method that is applied on top of pretrained representations, such as DINOv2-registers to bootstrap the learning signal and further improve upon them. 
+              This dense post-training leads to superior performance across various models and datasets, despite requiring only 16 hours on a single GPU. 
+              We demonstrate that this method generates high-quality dense feature encoders and establish several new state-of-the-art results: +5.5% and + 6% for non-parametric in-context semantic segmentation on ADE20k and Pascal VOC, and +7.2\% and +5.7\% for linear segmentation evaluations on COCO-Things and -Stuff.
               <div class="columns is-centered has-text-centered" style="display: block;">
-                <img src="static/images/fig1.png" alt="" style="width: 100%; max-width: 500px; padding-top: 10px;"/>
+                <img src="static/images/Method_v5.pdf" alt="" style="width: 100%; max-width: 500px; padding-top: 10px;"/>
                 <p style="width: 100%; max-width: 600px; margin: auto;">
                 <i> 
-                  Compared to VideoMAE, which uses RGB pixels as targets, we generate Sinkhorn-regularised features as reconstruction targets. This obtains more semantic features and yields better pretraining performance.
+                  Given an input image I, two augmentations τ1 and τ2 are applied to create two different views, which are processed by the teacher and student encoders, φt and φs respectively. The teacher encoder is updated using Exponential Moving Average (EMA). The encoded features are then aligned using ROI Align and compared with reference features Fr obtained by applying φs to other batch images. Next, pairwise distances Dij between Fs and Fr , as well as between Ft and Fr , are computed using cosine similarity. These distances are then sorted using differentiable sorting and utilized to force nearest order consistency through NeCo loss.
                 </i>
                 </p>
               </div>
