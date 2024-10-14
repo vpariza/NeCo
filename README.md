@@ -1,7 +1,14 @@
 # Improving DINOv2’s spatial representations in 19 GPU hours with Patch Neighbor Consistency
 
-#### Note: Our repository is developed by adopting and adapting multiple parts of the [Leopart](https://github.com/MkuuWaUjinga/leopart) model, as well as parts from other works like DINOv2, DINO, R-CNN, ...
+**University of Amsterdam**
 
+Valentinos Pariza, 
+Mohammadreza Salehi, 
+Gertjan Burghouts, 
+Francesco Locatello,
+Yuki M. Asano 
+
+ [[`Paper`](https://arxiv.org/abs/2408.11054)] 
 
 
 ## Table of Contents
@@ -13,7 +20,6 @@
 - [Dataset Preparation](#datasets)
 - [Visualizations](#visualizations)
 - [Citation](#citation)
-
 
 
 
@@ -211,6 +217,8 @@ If you find this repository useful, please consider giving a star ⭐ and citati
 }
 
 ```
+
+#### Note: Our repository is developed by adopting and adapting multiple parts of the [Leopart](https://github.com/MkuuWaUjinga/leopart) model, as well as parts from other works like DINOv2, DINO, R-CNN, ...
 
 
 
