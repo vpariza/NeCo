@@ -2,8 +2,8 @@
 
 **University of Amsterdam**
 
-Valentinos Pariza, 
-Mohammadreza Salehi, 
+Valentinos Pariza*, 
+Mohammadreza Salehi*, 
 Gertjan Burghouts, 
 Francesco Locatello,
 Yuki M. Asano 
