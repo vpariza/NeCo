@@ -198,14 +198,17 @@ class NeCo(pl.LightningModule):
         backbone_params_named = []
         block_numbers = []
         for name, param in self.model.named_parameters():
-            # add the general parameters of the backbone
-            backbone_params_named.append((name, param))
-            # and extract the block id/number
-            reg_exp = re.search('.*blocks[.]([0-9]+)[.].*',name, re.IGNORECASE)
-            block_number = None
-            if reg_exp:
-                block_number = int(reg_exp.group(1))
-            block_numbers.append(block_number)
+            if name.startswith("projection_head"):
+                head_params_named.append((name, param))
+            else:
+                # add the general parameters of the backbone
+                backbone_params_named.append((name, param))
+                # and extract the block id/number
+                reg_exp = re.search('.*blocks[.]([0-9]+)[.].*',name, re.IGNORECASE)
+                block_number = None
+                if reg_exp:
+                    block_number = int(reg_exp.group(1))
+                block_numbers.append(block_number)
         
         # filter out blocks not needed
         if self.trainable_blocks is not None:
