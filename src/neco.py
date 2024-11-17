@@ -167,7 +167,6 @@ class NeCo(pl.LightningModule):
                                       hidden_dim=self.projection_hidden_dim,
                                       n_layers_projection_head=self.n_layers_projection_head)
         return model_func(patch_size=self.patch_size,
-                         drop_path_rate=0.1,
                          output_dim=self.projection_feat_dim,
                          hidden_dim=self.projection_hidden_dim,
                          n_layers_projection_head=self.n_layers_projection_head)
