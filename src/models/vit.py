@@ -224,7 +224,7 @@ class VisionTransformer(nn.Module):
             start_idx = end_idx
 
         emb = self.forward_head(output_spatial)
-        result = (emb)
+        result = tuple([emb])
         if last_self_attention:
             result += (attentions,)
         return result
