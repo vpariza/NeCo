@@ -214,11 +214,10 @@
           <h2 class="title is-3">Abstract</h2>
           <div class="content has-text-justified">
             <p>
-              We propose the sorting of patch representations across views as a novel self-supervised learning signal to improve pretrained representations. 
-              To this end, we introduce NeCo: Patch Neighbor Consistency, a novel training loss that enforces patch-level nearest neighbor consistency across a student and teacher model, relative to reference batches. 
-              Our method leverages a differentiable sorting method that is applied on top of pretrained representations, such as DINOv2-registers to bootstrap the learning signal and further improve upon them. 
-              This dense post-training leads to superior performance across various models and datasets, despite requiring only 16 hours on a single GPU. 
-              We demonstrate that this method generates high-quality dense feature encoders and establish several new state-of-the-art results: +5.5% and + 6% for non-parametric in-context semantic segmentation on ADE20k and Pascal VOC, and +7.2% and +5.7% for linear segmentation evaluations on COCO-Things and -Stuff.
+              We introduce NeCo: Patch <u>Ne</u>ighbor <u>Co</u>nsistency, a novel self-supervised training loss that enforces patch-level nearest neighbor consistency across a student and teacher model. Compared to contrastive approaches that only yield binary learning signals, <i>i.e.</i> 'attract' and 'repel', this approach benefits from the more fine-grained learning signal of sorting spatially dense features relative to reference patches.
+              Our method leverages differentiable sorting applied on top of pretrained representations, such as DINOv2-registers to bootstrap the learning signal and further improve upon them. This dense post-pretraining leads to superior performance across various models and datasets, despite requiring only 19 hours on a single GPU. 
+              This method generates high-quality dense feature encoders and establishes several new state-of-the-art results such as +5.5% and +6% for non-parametric in-context semantic segmentation on ADE20k and Pascal VOC, 
+              +7.2% and +5.7% for linear segmentation evaluations on COCO-Things and -Stuff and improvements in the 3D understanding of multi-view consistency on SPair-71k, by more than 1.5%.
               <div class="columns is-centered has-text-centered" style="display: block;">
                 <img src="static/images/method.png" alt="" style="width: 100%; padding-top: 10px;"/>
               </div>
