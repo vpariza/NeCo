@@ -218,9 +218,6 @@
               Our method leverages differentiable sorting applied on top of pretrained representations, such as DINOv2-registers to bootstrap the learning signal and further improve upon them. This dense post-pretraining leads to superior performance across various models and datasets, despite requiring only 19 hours on a single GPU. 
               This method generates high-quality dense feature encoders and establishes several new state-of-the-art results such as +5.5% and +6% for non-parametric in-context semantic segmentation on ADE20k and Pascal VOC, 
               +7.2% and +5.7% for linear segmentation evaluations on COCO-Things and -Stuff and improvements in the 3D understanding of multi-view consistency on SPair-71k, by more than 1.5%.
-              <div class="columns is-centered has-text-centered" style="display: block;">
-                <img src="static/images/method.png" alt="" style="width: 100%; padding-top: 10px;"/>
-              </div>
             </div>
         </div>
       </div>
@@ -230,34 +227,26 @@
 
 
   <!-- Start second section -->
-  <!-- <section class="section hero">
+  <section class="section hero">
     <div class="container is-max-desktop">
       <div class="columns is-centered has-text-centered">
         <div class="column">
-          <h2 class="title is-3">Methodology </h2>
+          <h2 class="title is-3">Methodology</h2>
           <div class="content has-text-justified">
             <p>
-              In this work, we propose a new framework wherein the typically predefined reconstruction target space can be simultaneously learned alongside the video model. 
-              For this, a projection network is introduced which embeds both the visible and masked portions of the video, yielding deep feature reconstruction targets. However, employing a commonly used L2 reconstruction loss naïvely is ineffective due to the joint optimization of both networks leading to a trivial solution as both networks collapse to the same output irrespective of the input.
-              To solve this, we introduce SIGMA: Sinkhorn-guided masked video modeling, where deep features of space-time tubes are regularised by optimal transport uniformly across clusters.
-              This effectively acts as a high-entropy regularization constraint and enforces similar space-time tube features to be assigned to the same centroid, infusing semantic meaning into the feature space.
-              These cluster assignments and centroids are learned in an online manner using the fast Sinhkhorn-Knopp algorithm, yielding feature pseudo-labels as targets. 
-              With these targets, we formulate our loss objective as a symmetric prediction task, where the features from each branch -- the video model and the projection network -- cross-predict the cluster assignment of the other. By doing so, we force the features of space-time tubes to be expressed by a limited number of clusters, enforcing semantic-rich concepts, while eliminating the dependency on predefined targets such as the masked pixel values, commonly used in prior works. Moreover, despite our cross-prediction task, we do not rely on any augmentations or crops, making our model stable and easy to train.
+              The goal is to develop a feature space in which, for a given input, patches representing the same object exhibit similar features, whereas patches representing different objects show distinct features. A key challenge for a self-supervised method in this process is defining the similarity between image patches. Although patches from the same object (<i>e.g.</i> a cat) are expected to be more similar to each other than to those from different objects (<i>e.g.</i> a dog), they may still depict different parts of the object (<i>e.g.</i> a cat's tail and legs).
+            </p>
+            <p>
+              Therefore, a learned dense feature space must provide an <i>ordering</i> of similarities to ensure that patches from the same object and its parts are correctly distinguished from those of other objects. To this end, our method works by extracting dense features of the inputs, finding their pair-wise distances, and forcing a consistency between the order of nearest neighbors within a batch across two views. 
             </p>
             <div class="columns is-centered has-text-centered" style="display: block;">
-              <img src="static/images/method.pdf" alt="SIGMA" style="width: 100%; max-width: 1000px; padding-top: 10px;"/>
-              <p style="width: 100%; max-width: 1000px; margin: auto;">
-                <i>Given an input image \(I\), two augmentations \(\tau_1\) and \(\tau_2\) are applied to create two different views, which are processed by the teacher and student encoders, \(\phi_t\) and \(\phi_s\) respectively. The teacher encoder is updated using Exponential Moving Average (EMA). The encoded features are then aligned using ROI Align and compared with reference features \(F_r\) obtained by applying \(\phi_s\) to other batch images. Next, pairwise distances \(D_{ij}\) between \(F_s\) and \(F_r\), as well as between \(F_t\) and \(F_r\), are computed using cosine similarity. These distances are then sorted using differentiable sorting and utilized to force nearest order consistency through NeCo loss.
-              </p>
-              &nbsp;
+              <img src="static/images/method.png" alt="" style="width: 100%; padding-top: 10px;"/>
             </div>
-
-            
           </div>
         </div>
       </div>
     </div>
-  </section> -->
+  </section>
   <!-- End second section -->
 
 
