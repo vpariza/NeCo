@@ -103,7 +103,7 @@
                 <a href="https://yukimasano.github.io/" target="_blank">Yuki M. Asano</a>
               </span>
             <div class="is-size-5 publication-authors">
-              <!--span class="author-block" style="color: red;">Submitted to NeurIPS'24</span--><br>
+              <span class="author-block" style="color: red;">Accepted at ICLR'25</span<br>
            
             <span class="author-block">University of Amsterdam<br>
             <span style="font-size: small;">*equal contribution</span>
@@ -221,11 +221,8 @@
               This dense post-training leads to superior performance across various models and datasets, despite requiring only 16 hours on a single GPU. 
               We demonstrate that this method generates high-quality dense feature encoders and establish several new state-of-the-art results: +5.5% and + 6% for non-parametric in-context semantic segmentation on ADE20k and Pascal VOC, and +7.2% and +5.7% for linear segmentation evaluations on COCO-Things and -Stuff.
               <div class="columns is-centered has-text-centered" style="display: block;">
-                <img src="static/images/method.pdf" alt="" style="width: 100%; max-width: 500px; padding-top: 10px;"/>
+                <img src="static/images/method.png" alt="" style="width: 100%; max-width: 500px; padding-top: 10px;"/>
                 <p style="width: 100%; max-width: 800px; margin: auto;">
-                <i> 
-                  Given an input image \(I\), two augmentations \(\tau_1\) and \(\tau_2\) are applied to create two different views, which are processed by the teacher and student encoders, \(\phi_t\) and \(\phi_s\) respectively. The teacher encoder is updated using Exponential Moving Average (EMA). The encoded features are then aligned using ROI Align and compared with reference features \(F_r\) obtained by applying \(\phi_s\) to other batch images. Next, pairwise distances \(D_{ij}\) between \(F_s\) and \(F_r\), as well as between \(F_t\) and \(F_r\), are computed using cosine similarity. These distances are then sorted using differentiable sorting and utilized to force nearest order consistency through NeCo loss.
-                </i>
                 </p>
               </div>
             </div>
