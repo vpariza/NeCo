@@ -86,25 +86,25 @@
                 <!-- Paper authors -->
                 <b>
                   <span class="author-block">
-                    <a href="https://www.linkedin.com/in/valentinos-pariza/" target="_blank">Valentinos Pariza*</a>,
+                    <a href="https://www.linkedin.com/in/valentinos-pariza/" target="_blank">Valentinos Pariza <sup>(1)</sup></a>,
                   </span>
                   <span class="author-block">
-                    <a href="https://smsd75.github.io/" target="_blank">Mohammadreza Salehi*</a>
+                    <a href="https://smsd75.github.io/" target="_blank">Mohammadreza Salehi<sup>(1)</sup></a>
                   </span>
                   <span class="author-block">
-                    <a href="https://gertjanburghouts.github.io/about/" target="_blank">Gertjan J. Burghouts</a>,
+                    <a href="https://gertjanburghouts.github.io/about/" target="_blank">Gertjan J. Burghouts <sup>(2)</sup></a>,
                   </span>
                   <br>
                   <span class="author-block">
-                    <a href="https://www.francescolocatello.com" target="_blank">Francesco Locatello</a>,
+                    <a href="https://www.francescolocatello.com" target="_blank">Francesco Locatello <sup>(3)</sup></a>,
                   </span>
                   <span class="author-block">
-                    <a href="https://yukimasano.github.io/" target="_blank">Yuki M. Asano</a>
+                    <a href="https://yukimasano.github.io/" target="_blank">Yuki M. Asano <sup>(4)</sup></a>
                   </span>
                 </b>
               </div>
               <div class="is-size-5 publication-authors">
-                <span class="author-block">University of Amsterdam, *equal contribution</span>
+                <span class="author-block"><sup>(1) & (4)</sup> from University of Amsterdam, <sup>(2)</sup> from TNO,<sup>(3)</sup> from ISTA,<br> <sup>(1)</sup> equal contribution</span>
                 <br>
                 <span class="author-block" style="color: red;">Accepted at ICLR'25</span>
               </div>
@@ -240,7 +240,7 @@
               Therefore, a learned dense feature space must provide an <i>ordering</i> of similarities to ensure that patches from the same object and its parts are correctly distinguished from those of other objects. To this end, our method works by extracting dense features of the inputs, finding their pair-wise distances, and forcing a consistency between the order of nearest neighbors within a batch across two views. 
             </p>
             <div class="columns is-centered has-text-centered" style="display: block;">
-              <img src="static/images/method.png" alt="" style="width: 100%; padding-top: 10px;"/>
+              <img src="static/images/method.png" alt="" style="width: 90%; padding-top: 10px;"/>
             </div>
           </div>
         </div>
@@ -351,6 +351,68 @@
   </section> -->
   <!-- End first section -->
 
+  <!-- Image carousel -->
+   <br>
+  <section class="hero is-small">
+    <div class="hero-body">
+      <div class="container">
+        <h2 class="title is-3 has-text-centered">Quantitative Results</h2>
+        <div id="results-carousel" class="carousel results-carousel">
+        <div class="item">
+          <!-- Your image here -->
+          <img src="static/images/Quantitative/hbird_eval.png" style="width: 70%; padding-top: 5px;" alt="Hummingbird"/>
+          <h2 class="subtitle has-text-centered">
+            Hummingbird Evaluation.
+          </h2>
+        </div>
+        <div class="item">
+          <!-- Your image here -->
+          <img src="static/images/Quantitative/lin_seg.png" style="width: 70%; padding-top: 5px;" alt="Linear Segmentation"/>
+          <h2 class="subtitle has-text-centered">
+            Linear Segmentation Evaluation.
+          </h2>
+        </div>
+        <div class="item">
+          <!-- Your image here -->
+          <img src="static/images/Quantitative/clustering_seg.png" style="width: 70%; padding-top: 5px;" alt="Unsupervied Clustering Segmentation"/>
+          <h2 class="subtitle has-text-centered">
+          Unsupervied Clustering Segmentation Evaluation.
+        </h2>
+      </div>
+    </div>
+  </div>
+  </div>
+  </section>
+  <!-- End image carousel -->
+
+  <br>
+    <!-- Image carousel -->
+    <section class="hero is-small">
+      <div class="hero-body">
+        <div class="container">
+          <h2 class="title is-3 has-text-centered">Qualitative Results</h2>
+          <div id="results-carousel" class="carousel results-carousel">
+          <div class="item">
+            <!-- Your image here -->
+            <img src="static/images/Qualitative/neco_nn_ret_example.pdf" style="width: 75%; padding-top: 5px;" alt="NeCo"/>
+            <h2 class="subtitle has-text-centered">
+              NN Patch Results of NeCo on subset of Pascal VOC.
+            </h2>
+          </div>
+          <div class="item">
+            <!-- Your image here -->
+            <img src="static/images/Qualitative/dinov2r_nn_ret_example.pdf" style="width: 75%; padding-top: 5px;" alt="DINOv2R"/>
+            <h2 class="subtitle has-text-centered">
+              NN Patch Results of DINOv2R on subset of Pascal VOC.
+            </h2>
+          </div>
+      </div>
+    </div>
+    </div>
+    </section>
+    <!-- End image carousel -->
+
+
   <section class="section" id="BibTeX" style="background-color: #fafafa;">
     <div class="container is-max-desktop content">
       <div class="columns is-centered">
@@ -431,21 +493,22 @@
 
 
   <!--BibTex citation -->
-  <!-- <section class="section" id="BibTeX" style="background-color: #fafafa;">
+  <section class="section" id="BibTeX" style="background-color: #fafafa;">
     <div class="container is-max-desktop content">
       <h2 class="title">BibTeX</h2>
       <pre style="background-color: #f5f5f5;"><code>
-      @misc{dorkenwald2024pin,
-            title={PIN: Positional Insert Unlocks Object Localisation Abilities in VLMs}, 
-            author={Michael Dorkenwald and Nimrod Barazani and Cees G. M. Snoek and Yuki M. Asano},
-            year={2024},
-            eprint={2402.08657},
-            archivePrefix={arXiv},
-            primaryClass={cs.CV}
-      }
+        @misc{pariza2024necoimprovingdinov2sspatial,
+          title={NeCo: Improving DINOv2's spatial representations in 19 GPU hours with Patch Neighbor Consistency}, 
+          author={Valentinos Pariza and Mohammadreza Salehi and Gertjan Burghouts and Francesco Locatello and Yuki M. Asano},
+          year={2024},
+          eprint={2408.11054},
+          archivePrefix={arXiv},
+          primaryClass={cs.CV},
+          url={https://arxiv.org/abs/2408.11054}, 
+    }
       </code></pre>
     </div>
-  </section> -->
+  </section>
   <!--End BibTex citation -->
 
 
