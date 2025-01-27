@@ -161,6 +161,7 @@ class NeCo(pl.LightningModule):
             raise ValueError(f"{self.arch} is not supported")
         if self.use_teacher:
             self.teacher = model_func(patch_size=self.patch_size,
+                                      drop_path_rate=0.1,
                                       output_dim=self.projection_feat_dim,
                                       hidden_dim=self.projection_hidden_dim,
                                       n_layers_projection_head=self.n_layers_projection_head)
