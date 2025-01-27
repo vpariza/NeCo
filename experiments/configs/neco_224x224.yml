@@ -36,8 +36,6 @@ train:
   batch_size: 6     # effective batch size is bs * gpus * res_w ** 2
   val_batch_size: 32
   max_epochs: 50
-  nmb_prototypes: 300
-  temperature: 0.1
   crops_for_assign: [0, 1] # num items should be num of global crops
   optimizer: 'adamw'
   lr_backbone: 0.000001

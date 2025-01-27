@@ -505,9 +505,9 @@ def get_backbone_weights(arch: str, method: str, patch_size: int = None,
     prefix_idx, prefix = get_backbone_prefix(weights, arch)
     if weight_prefix:
         return {f"{weight_prefix}.{k[prefix_idx:]}": v for k, v in weights.items() if k.startswith(prefix)
-                and "head" not in k and "prototypes" not in k}
+                and "head" not in k}
     return {f"{k[prefix_idx:]}": v for k, v in weights.items() if k.startswith(prefix)
-            and "head" not in k and "prototypes" not in k}
+            and "head" not in k}
 
 
 def get_backbone_prefix(weights: Dict[str, torch.Tensor], arch: str) -> Optional[Tuple[int, str]]:

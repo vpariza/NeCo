@@ -24,8 +24,8 @@ class NeCo(pl.LightningModule):
 
     def __init__(self, gpus: int, num_samples: int, batch_size: int, max_epochs: int, lr_heads: float,
                  lr_backbone: float, final_lr: float, weight_decay_end: float, weight_decay: float, 
-                 temperature: float, projection_hidden_dim: int, projection_feat_dim: int,
-                 n_layers_projection_head: int, crops_for_assign: List[int], nmb_crops: List[int], num_classes: int, val_iters: int,
+                 projection_hidden_dim: int, projection_feat_dim: int, n_layers_projection_head: int, 
+                 crops_for_assign: List[int], nmb_crops: List[int], num_classes: int, val_iters: int,
                  num_clusters_kmeans: List[int], use_teacher: bool = True, loss_mask: str = 'all',
                  queue_length: int = 0, momentum_teacher: float = 0.9995, momentum_teacher_end: float = 1.,
                  exclude_norm_bias: bool = True, optimizer: str = 'adam', num_nodes: int = 1,
@@ -45,7 +45,6 @@ class NeCo(pl.LightningModule):
         :param final_lr: final learning rate for cosine learning rate schedule
         :param weight_decay_end: final weight decay for cosine weight decay schedule
         :param weight_decay: weight decay for optimizer
-        :param temperature: temperature applied before softmaxing the cluster assignment predictions
         :param projection_hidden_dim: embedding dimensionality of hidden layers in projection head
         :param projection_feat_dim: embedding dimensionality of output layer in projection head
         :param n_layers_projection_head: number of layers for projection head
@@ -96,7 +95,6 @@ class NeCo(pl.LightningModule):
         self.optim = optimizer
         self.exclude_norm_bias = exclude_norm_bias
         self.weight_decay = weight_decay
-        self.temperature = temperature
         self.final_lr = final_lr
         self.lr_backbone = lr_backbone
         self.max_epochs = max_epochs
