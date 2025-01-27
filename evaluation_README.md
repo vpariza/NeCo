@@ -21,3 +21,10 @@ For fully unsupervised semantic segmentation, use the command below and set the 
 ```
 python experiments/overcluster/fully_unsup_seg.py --data_dir "" --ckpt_path ""
 ```
+
+
+#### Evaluation: Visual In-Context Learning
+
+Please refer to our repository where we have open-sourced the implementation of the original paper:  
+[**"Open Hummingbird Eval"**](https://arxiv.org/abs/2306.01667)  
+GitHub: [**vpariza/open-hummingbird-eval**](https://github.com/vpariza/open-hummingbird-eval)
