@@ -14,8 +14,6 @@ An exemplary call to evaluate NeCo could look like this:
 python experiments/overcluster/eval_overcluster.py --config_path experiments/overcluster/configs/pascal/neco.yml
 ```
 
-#### Evaluation: fully unsupervised semantic segmentation
-
 #### Evaluation: Fully Unsupervised Semantic Segmentation
 
 For fully unsupervised semantic segmentation, use the command below and set the arguments accordingly. For instance:
