@@ -14,7 +14,6 @@ To evaluate any of our approaches on the Dense NN Retrieval method you should us
 ```
 python experiments/dense_nn_ret_eval/eval_dense_nn_ret_emb.py  --config_path experiments/dense_nn_ret_eval/pascal/neco.yml --ckpt_path {neco-ckpt-path}
 ```
-for ViTS-16 respectively. 
 **Note** that the checkpoint should be the checkpoints saved by Pytorch Lightning during training.
 
 You can define your own configuration files like the one above.
@@ -29,7 +28,7 @@ python experiments/gen_seg_maps/gen_seg_maps.py --config_path experiments/gen_se
 
 #### Evaluation: Overclustering
 For overclustering evaluation we provide a script `sup_overcluster.py` under `experiments/overcluster`.
-An exemplary call to evaluate a NeCo trained on ImageNet-100 on Pascal VOC could look like this:
+An exemplary call to evaluate NeCo could look like this:
 ```
 python experiments/overcluster/sup_overcluster.py --config_path experiments/overcluster/configs/pascal/neco.yml
 ```
