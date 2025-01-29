@@ -178,8 +178,6 @@ class DinoVisionTransformer(nn.Module):
 
         self.mask_token = nn.Parameter(torch.zeros(1, embed_dim))
 
-        self.init_weights()
-
         # Construct projection head
         nlayers = max(n_layers_projection_head, 1)
         if nlayers == 1:
@@ -192,6 +190,9 @@ class DinoVisionTransformer(nn.Module):
                 layers.append(nn.GELU())
             layers.append(nn.Linear(hidden_dim, output_dim))
             self.projection_head = nn.Sequential(*layers)
+
+        # Initialize the model's weights
+        self.init_weights()
 
     def init_weights(self):
         trunc_normal_(self.pos_embed, std=0.02)
