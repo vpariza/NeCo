@@ -99,7 +99,7 @@ Below is a table with some of our results on Pascal VOC 2012 based on DINOv2 bac
     <td>66.2</td>
     <td>68.3</td>
     <td><a href="https://1drv.ms/u/c/67fac29a77adbae6/EZ3DX9ftK41Gik6ZLz-iPjgB2dZcW5Xco4B83_wM2dTy2A?e=885yjU">student</a></td>
-    <td><a href="https://1drv.ms/u/c/67fac29a77adbae6/EZ4bSpcUEYtHtsdusEiR08cBikV63UzmrCuIgLNPeRqEew?e=n2EVEI">teacher</a></td>
+    <td><a href="https://1drv.ms/u/c/67fac29a77adbae6/Ed8Bp7b3I5ZCs6ZPIC2vUGEBpTOPG_Avd0nL6eW6hVZWdQ?e=UZvpor">teacher</a></td>
   </tr>
 </table>
 
