@@ -208,12 +208,13 @@ This visualization shows the ability of NeCo without relying on any supervision.
 
 If you find this repository useful, please consider giving a star ⭐ and citation 📣:
 ``` 
-
-@article{pariza2024neco,
-  title={NeCo: Improving DINOv2's spatial representations in 19 GPU hours with Patch Neighbor Consistency},
-  author={Pariza, Valentinos and Salehi, Mohammadreza and Burghouts, Gertjan and Locatello, Francesco and Asano, Yuki M},
-  journal={arXiv preprint arXiv:2408.11054},
-  year={2024}
+@inproceedings{
+   pariza2025near,
+   title={Near, far: Patch-ordering enhances vision foundation models' scene understanding},
+  author={Valentinos Pariza and Mohammadreza Salehi and Gertjan J. Burghouts and Francesco Locatello and Yuki M Asano},
+   booktitle={The Thirteenth International Conference on Learning Representations},
+   year={2025},
+   url={https://openreview.net/forum?     id=Qro97zWC29}
 }
 
 ```
