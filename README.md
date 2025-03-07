@@ -211,7 +211,7 @@ If you find this repository useful, please consider giving a star ⭐ and citati
 @inproceedings{
    pariza2025near,
    title={Near, far: Patch-ordering enhances vision foundation models' scene understanding},
-  author={Valentinos Pariza and Mohammadreza Salehi and Gertjan J. Burghouts and Francesco Locatello and Yuki M Asano},
+   author={Valentinos Pariza and Mohammadreza Salehi and Gertjan J. Burghouts and Francesco Locatello and Yuki M Asano},
    booktitle={The Thirteenth International Conference on Learning Representations},
    year={2025},
    url={https://openreview.net/forum?     id=Qro97zWC29}
