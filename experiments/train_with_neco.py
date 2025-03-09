@@ -216,7 +216,6 @@ def finetune_with_spatial_loss(_config, _run):
         n_layers_projection_head=train_config["n_layers_projection_head"],
         max_epochs=train_config["max_epochs"],
         val_iters=train_config["val_iters"],
-        temperature=train_config["temperature"],
         crops_for_assign=train_config["crops_for_assign"],
         nmb_crops=data_config["nmb_samples"],
         optimizer=train_config["optimizer"],
