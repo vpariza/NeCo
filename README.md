@@ -5,6 +5,7 @@
 🌐 **[Project Page](https://vpariza.github.io/NeCo/)** / ⌨️ **[GitHub Repository](https://github.com/vpariza/NeCo)** / 📄 **[Read the Paper on arXiv](https://arxiv.org/abs/2408.11054)**
 ## Table of Contents
 
+- [News](#news)
 - [Introduction](#introduction)
 - [GPU Requirements](#gpu-requirements)
 - [Environment Setup](#environment-setup)
@@ -15,7 +16,18 @@
 - [Visualizations](#visualizations)
 - [Citation](#citation)
 
+## News
+Thank you for using our code. Here we include news about changes in the repository.
+1. The repository has changed substantially to upgrade libraries to more recent libraries that speed up execution and reduce memory usage especially for the `v2` ViT architecture that is used by Dinov2. The boost in the latter architecture comes by the use of xformers just like Dinov2 training.
+2. We updated the table below with new model entries and have added post-training config files, for dinov2, and dinov2r with and without the use of registers.
+3. We have clarified how each model is trained by explicitly providing a config file next to each model we post-trained in the table below.
+4. We have added code for linear segmentation for the Cityscapes Dataset.
+5. We cleared the code more and added more flexibility on what can be used during training via the configuration in files. More specifically added the following parameters:
+   * `eval_attn_maps` (True/False) for specifying whether to evaluate the attention maps during training.
+   * `num_register_tokens` (int: default to 0) for specifying whether to use registers and how much. Only works with architecture `v2`.
+   
 
+If you are interested for the legacy code, please look our github branch [neco-1_x](https://github.com/vpariza/NeCo/tree/neco-1_x).
 
 ## Introduction
 
