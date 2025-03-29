@@ -1,4 +1,4 @@
-# Improving DINOv2’s spatial representations in 19 GPU hours with Patch Neighbor Consistency
+# Near, far: Patch-ordering enhances vision foundation models' scene understanding
 
 **University of Amsterdam**
 
@@ -15,6 +15,8 @@ Yuki M. Asano
 
 - [Introduction](#introduction)
 - [GPU Requirements](#gpu-requirements)
+- [Environment Setup](#environment-setup)
+- [Loading pretrained models](#loading-pretrained-models)
 - [Training](#training-setup)
 - [Evaluation](#evaluation)
 - [Dataset Preparation](#datasets)
@@ -50,26 +52,73 @@ Below is a table with some of our results on Pascal VOC 2012 based on DINOv2 bac
     <th>Dense NN Retrieval</th>
     <th>linear</th>
     <th colspan="2">download</th>
+    <th>config</th>
   </tr>
   <tr>
     <td>DINOv2</td>
     <td>ViT-S/14</td>
     <td>21M</td>
+    <td>57.7</td>
+    <td>78.6</td>
+    <td>81.4</td>
+    <td><a href="https://huggingface.co/FunAILab/NeCo/resolve/main/vit-small/dinov2-architectures/neco_on_dinov2_vit14_model.ckpt">student</a></td>
+    <td><a href="https://huggingface.co/FunAILab/NeCo/resolve/main/vit-small/dinov2-architectures/neco_on_dinov2_vit14_teacher.ckpt">teacher</a></td>
+    <td><a href="./experiments/configs/models/small/neco_dinov2.yml">config</a></td>
+  </tr>
+  <tr>
+    <td>DINOv2R-XR</td>
+    <td>ViT-S/14</td>
+    <td>21M</td>
     <td>72.6</td>
+    <td>80.2</td>
     <td>81.3</td>
-    <td>78.9</td>
-    <td><a href="https://1drv.ms/u/c/67fac29a77adbae6/EWvXdau9r6NIr-vIc_xDlxAB1sDrljoaPR_A3JhIEeE8dw?e=pOXEXG">student</a></td>
-    <td><a href="https://1drv.ms/u/c/67fac29a77adbae6/EYUuXDWfsd1Pi_MgkYcEVfcB_wVWeIr9faBO5xdc4L4REA?e=BW5aLc">teacher</a></td>
+    <td><a href="https://huggingface.co/FunAILab/NeCo/resolve/main/vit-small/dinov2-architectures/neco_on_dinov2r_xr_vit14_model.ckpt">student</a></td>
+    <td><a href="https://huggingface.co/FunAILab/NeCo/resolve/main/vit-small/dinov2-architectures/neco_on_dinov2r_xr_vit14_teacher.ckpt">teacher</a></td>
+    <td><a href="./experiments/configs/models/small/neco_dinov2r_xr.yml">config</a></td>
+  </tr>
+  <tr>
+    <td>DINOv2R</td>
+    <td>ViT-S/14</td>
+    <td>21M</td>
+    <td>68.9</td>
+    <td>80.7</td>
+    <td>81.5</td>
+    <td><a href="https://huggingface.co/FunAILab/NeCo/resolve/main/vit-small/dinov2-architectures/neco_on_dinov2r_vit14_model.ckpt">student</a></td>
+    <td><a href="https://huggingface.co/FunAILab/NeCo/resolve/main/vit-small/dinov2-architectures/neco_on_dinov2r_vit14_teacher.ckpt">teacher</a></td>
+    <td><a href="./experiments/configs/models/small/neco_dinov2r.yml">config</a></td>
   </tr>
   <tr>
     <td>DINOv2</td>
     <td>ViT-B/14</td>
     <td>85M</td>
+    <td>71.1</td>
+    <td>82.8</td>
+    <td>84.5</td>
+    <td><a href="https://huggingface.co/FunAILab/NeCo/resolve/main/vit-base/dinov2-architectures/neco_on_dinov2_vit14_model.ckpt">student</a></td>
+    <td><a href="https://huggingface.co/FunAILab/NeCo/resolve/main/vit-base/dinov2-architectures/neco_on_dinov2_vit14_teacher.ckpt">teacher</a></td>
+    <td><a href="./experiments/configs/models/base/neco_dinov2.yml">config</a></td>
+  </tr>
+  <tr>
+    <td>DINOv2R-XR</td>
+    <td>ViT-B/14</td>
+    <td>85M</td>
     <td>71.8</td>
+    <td>83.5</td>
     <td>83.3</td>
-    <td>81.4</td>
-    <td><a href="https://1drv.ms/u/c/67fac29a77adbae6/EQGCG4KgPW9Eqgl_xcwFcgsBitTXIOL1GfGcUa1MJq4cUw?e=WQb7R7">student</a></td>
-    <td><a href="https://1drv.ms/u/c/67fac29a77adbae6/EdR_Fily3xNInI-QlW2MGIUBt3DdDoMD8dGvvDDFn8wiPQ?e=oFaZhp">teacher</a></td>
+    <td><a href="https://huggingface.co/FunAILab/NeCo/resolve/main/vit-base/dinov2-architectures/neco_on_dinov2r_xr_vit14_model.ckpt">student</a></td>
+    <td><a href="https://huggingface.co/FunAILab/NeCo/resolve/main/vit-base/dinov2-architectures/neco_on_dinov2r_xr_vit14_teacher.ckpt">teacher</a></td>
+    <td><a href="./experiments/configs/models/base/neco_dinov2r_xr.yml">config</a></td>
+  </tr>
+  <tr>
+    <td>DINOv2R</td>
+    <td>ViT-S/14</td>
+    <td>85M</td>
+    <td>71.9</td>
+    <td>82.9</td>
+    <td>84.4</td>
+    <td><a href="https://huggingface.co/FunAILab/NeCo/resolve/main/vit-base/dinov2-architectures/neco_on_dinov2r_vit14_model.ckpt">student</a></td>
+    <td><a href="https://huggingface.co/FunAILab/NeCo/resolve/main/vit-base/dinov2-architectures/neco_on_dinov2r_vit14_teacher.ckpt">teacher</a></td>
+    <td><a href="./experiments/configs/models/base/neco_dinov2r.yml">config</a></td>
   </tr>
   <tr>
     <td>DINO</td>
@@ -78,8 +127,9 @@ Below is a table with some of our results on Pascal VOC 2012 based on DINOv2 bac
     <td>47.9</td>
     <td>61.3</td>
     <td>65.8</td>
-    <td><a href="https://1drv.ms/u/c/67fac29a77adbae6/EX1_VUd7oxRErMXqOUcjSGcBqut9vGER8aqtGz9Yvl4_pQ?e=9VMSfb">student</a></td>
-    <td><a href="https://1drv.ms/u/c/67fac29a77adbae6/EfTNadBzg0VNrjmAoWDe2rsBVjPVcGvnM-rKkFAYq14IgQ?e=45j3L1">teacher</a></td>
+    <td><a href="https://huggingface.co/FunAILab/NeCo/resolve/main/vit-small/dino-architectures/neco_on_dino_vit16_model.ckpt">student</a></td>
+    <td><a href="https://huggingface.co/FunAILab/NeCo/resolve/main/vit-small/dino-architectures/neco_on_dino_vit16_teacher.ckpt">teacher</a></td>
+    <td><a href="./experiments/configs/models/small/neco_dino.yml">config</a></td>
   </tr>
   <tr>
     <td>TimeT</td>
@@ -88,8 +138,9 @@ Below is a table with some of our results on Pascal VOC 2012 based on DINOv2 bac
     <td>53.1</td>
     <td>66.5</td>
     <td>68.5</td>
-    <td><a href="https://1drv.ms/u/c/67fac29a77adbae6/EUW5Ym_h2rlMiuU8UBRdi2IBOCicWyFbUpQL46FSjqzJdg?e=2TmaQB">student</a></td>
-    <td><a href="https://1drv.ms/u/c/67fac29a77adbae6/EZ4bSpcUEYtHtsdusEiR08cBikV63UzmrCuIgLNPeRqEew?e=U4Y2ga">teacher</a></td>
+    <td><a href="https://huggingface.co/FunAILab/NeCo/resolve/main/vit-small/dino-architectures/neco_on_timetuning_vit16_model.ckpt">student</a></td>
+    <td><a href="https://huggingface.co/FunAILab/NeCo/resolve/main/vit-small/dino-architectures/neco_on_timetuning_vit16_teacher.ckpt">teacher</a></td>
+    <td><a href="./experiments/configs/models/small/neco_timetuning.yml">config</a></td>
   </tr>
   <tr>
     <td>Leopart</td>
@@ -98,16 +149,15 @@ Below is a table with some of our results on Pascal VOC 2012 based on DINOv2 bac
     <td>55.3</td>
     <td>66.2</td>
     <td>68.3</td>
-    <td><a href="https://1drv.ms/u/c/67fac29a77adbae6/EZ3DX9ftK41Gik6ZLz-iPjgB2dZcW5Xco4B83_wM2dTy2A?e=885yjU">student</a></td>
-    <td><a href="https://1drv.ms/u/c/67fac29a77adbae6/Ed8Bp7b3I5ZCs6ZPIC2vUGEBpTOPG_Avd0nL6eW6hVZWdQ?e=UZvpor">teacher</a></td>
+    <td><a href="https://huggingface.co/FunAILab/NeCo/resolve/main/vit-small/dino-architectures/neco_on_leopart_vit16_model.ckpt">student</a></td>
+    <td><a href="https://huggingface.co/FunAILab/NeCo/resolve/main/vit-small/dino-architectures/neco_on_leopart_vit16_teacher.ckpt">teacher</a></td>
+    <td><a href="./experiments/configs/models/small/neco_leopart.yml">config</a></td>
   </tr>
 </table>
 
 In the following sections, we will delve into the training process, evaluation metrics, and provide instructions for using NeCo in your own projects.
 
 ## GPU Requirements
-
-<a name="gpu-requirements"></a>
 Optimizing with our model, ***NeCo***, does not necessitate a significant GPU budget. Our training process is conducted on a single NVIDIA A100 GPU.
 
 
@@ -118,11 +168,12 @@ You can install it by running the following command:
 ```bash
 conda env create -f environment.yaml
 ```
+Or you can see the step by step process in the [Installation Guide](INSTALLATION.md) guide.
 
 #### Pythonpath
 Export the module to PYTHONPATH within the repository's parent directory.
 `
-export PYTHONPATH="${PYTHONPATH}:PATH_TO_REPO"
+export PYTHONPATH="${PYTHONPATH}:$PATH_TO_REPO"
 `
 #### Neptune
 We use neptune for logging experiments.
@@ -133,15 +184,50 @@ Also make sure to adapt the project name when setting up the logger.
 
 ## Loading pretrained models
 
-To use NeCo embeddings on downstream dense prediction tasks, you just need to install `timm`  and `torch` and run:
+To use NeCo models on downstream dense prediction tasks, you just need to install `timm`  and `torch` and depending on which checkpoint you use you can load it as follows:
 
+The models can be download from our [NeCo Hugging Face repo](https://huggingface.co/FunAILab/NeCo/tree/main).
+
+### Models after post-training dinov2 (following dinov2 architecture)
+
+#### NeCo on Dinov2 
 ```python
 import torch
+# change to dinov2_vitb14 for base as described in:
+#    https://github.com/facebookresearch/dinov2
+model =  torch.hub.load('facebookresearch/dinov2', 'dinov2_vits14') 
 path_to_checkpoint = "<your path to downloaded ckpt>"
-model =  torch.hub.load('facebookresearch/dinov2', 'dinov2_vits14')
 state_dict = torch.load(path_to_checkpoint)
 model.load_state_dict(state_dict, strict=False)
 ```
+#### NeCo on Dinov2 with Registers
+```python
+import torch
+# change to dinov2_vitb14_reg for base as described in:
+#    https://github.com/facebookresearch/dinov2
+model =  torch.hub.load('facebookresearch/dinov2', 'dinov2_vits14_reg') 
+path_to_checkpoint = "<your path to downloaded ckpt>"
+state_dict = torch.load(path_to_checkpoint)
+model.load_state_dict(state_dict, strict=False)
+```
+### Models after post-training dino or similar (following dino architecture)
+#### NeCo on Dinov2 with Registers
+```python
+import torch
+from timm.models.vision_transformer import vit_small_patch16_224, vit_base_patch16_224
+# Change to vit_base_patch8_224() if you want to use our larger model
+model = vit_small_patch16_224()  
+path_to_checkpoint = "<your path to downloaded ckpt>"
+state_dict = torch.load(path_to_checkpoint, map_location='cpu')
+model.load_state_dict(state_dict, strict=False)
+```
+
+**Note:** In case you want to directly load the weights of the model from a hugging face url, please execute:
+```python
+import torch
+state_dict = torch.hub.load_state_dict_from_url("<url to the hugging face checkpoint>")
+```
+
 
 ## Training Setup
 
@@ -190,7 +276,7 @@ We use PyTorch Lightning data modules for our datasets. Supported datasets inclu
 
 Data modules are located in the `data/` directory and handle loading, preprocessing, and augmentation. When using these datasets, ensure you update the paths in your configuration files to match your local setup.
 
-For detailed information on dataset preparation, download instructions, and specific folder structures, please refer to the [Dataset README](dataset_README.md).
+For detailed information on dataset preparation, download instructions, and specific folder structures, please refer to the [Dataset README](DATASET.md).
 
 
 
@@ -214,7 +300,7 @@ If you find this repository useful, please consider giving a star ⭐ and citati
    author={Valentinos Pariza and Mohammadreza Salehi and Gertjan J. Burghouts and Francesco Locatello and Yuki M Asano},
    booktitle={The Thirteenth International Conference on Learning Representations},
    year={2025},
-   url={https://openreview.net/forum?     id=Qro97zWC29}
+   url={https://openreview.net/forum?id=Qro97zWC29}
 }
 
 ```

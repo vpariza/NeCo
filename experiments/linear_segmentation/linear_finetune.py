@@ -24,6 +24,8 @@ from src.models.vit import vit_small, vit_base, vit_large
 from src.models.vit_v2 import vit_small as vit_small_v2, vit_base as vit_base_v2, vit_large as vit_large_v2
 from src.linear_finetuning_transforms import Compose, Normalize, RandomHorizontalFlip, RandomResizedCrop, ToTensor, SepTransforms
 
+# from src.models.vit_clip_exp import vit_base as vit_clip_base
+from data.cityscapes.cityscapes_data import CityscapesDataModule
 from data.ade20k.ade20kdata import Ade20kDataModule
 
 ex = sacred.experiment.Experiment()
@@ -33,7 +35,8 @@ api_key = "<YOUR API KEY HERE>"
 @click.option("--config_path", type=str)
 @click.option("--ckpt_path", type=str, default=None)
 @click.option('--method', type=str, default=None)
-def entry(config_path, ckpt_path, method):
+@click.option('--arch', type=str, default=None)
+def entry(config_path, ckpt_path, method, arch):
     if config_path is not None:
         ex.add_config(os.path.join(os.path.abspath(os.path.dirname(__file__)), config_path))
     else:
@@ -47,6 +50,9 @@ def entry(config_path, ckpt_path, method):
         params['train.method'] = method
     if ckpt_path is not None:
         params['train.ckpt_path'] = ckpt_path
+    if arch is not None:
+        params['train.arch'] = arch
+
     ex.run(config_updates=params, options={'--name': ex_name})
 
 @ex.main
@@ -54,13 +60,15 @@ def entry(config_path, ckpt_path, method):
 def linear_finetune(_config, _run):
     # Init logger
     neptune_logger = NeptuneLogger(
-        offline_mode=_config["log_status"] == 'offline' if _config.get("log_status") else True,
-        offline_mode=True,
-        project_name="<Your Project Name>",
-        experiment_name=_run.experiment_info["name"],
-        params=pd.json_normalize(_config).to_dict(orient='records')[0],
+        api_key=api_key,
+        mode="offline" if _config.get("log_status") == 'offline' else "async",
+        project="<Your Project Name>",
+        name=_run.experiment_info["name"],
         tags=_config["tags"].split(','),
     )
+    params=pd.json_normalize(_config).to_dict(orient='records')[0] 
+    neptune_logger.experiment["parameters"]=params
+    
     print("Config:")
     print(_config)
     data_config = _config["data"]
@@ -124,7 +132,6 @@ def linear_finetune(_config, _run):
                                      val_transforms=val_image_transforms,
                                      val_target_transforms=val_target_transforms)
     elif dataset_name == "ade20k":
-        # TODO: Evaluate its correctness
         num_classes = 151
         ignore_index = 0
         val_transforms = SepTransforms(val_image_transforms, val_target_transforms)
@@ -134,6 +141,16 @@ def linear_finetune(_config, _run):
                                         shuffle=False,
                                         num_workers=_config["num_workers"],
                                         batch_size=train_config["batch_size"])
+    elif dataset_name == "cityscapes":
+        num_classes = 19
+        ignore_index = 255
+        val_transforms = SepTransforms(val_image_transforms, val_target_transforms)
+        data_module = CityscapesDataModule(root=data_dir,
+                                           train_transforms=train_transforms,
+                                           val_transforms=val_transforms,
+                                           shuffle=True,
+                                           num_workers=_config["num_workers"],
+                                           batch_size=train_config["batch_size"])
     else:
         raise ValueError(f"{dataset_name} not supported")
 
@@ -158,7 +175,8 @@ def linear_finetune(_config, _run):
         val_iters=val_iters,
         decay_rate=decay_rate if decay_rate is not None else 0.1,
         drop_at=train_config["drop_at"],
-        ignore_index=ignore_index
+        ignore_index=ignore_index,
+        num_register_tokens=train_config["num_register_tokens"] if "num_register_tokens" in train_config else 0,
     )
 
     # Optionally load weights
@@ -183,25 +201,27 @@ def linear_finetune(_config, _run):
         num_sanity_val_steps=0,
         logger=neptune_logger,
         max_epochs=train_config["max_epochs"],
-        gpus=_config["gpus"],
-        accelerator='ddp' if _config["gpus"] > 1 else None,
+        devices=_config["gpus"],
+        accelerator='cuda', 
         fast_dev_run=train_config["fast_dev_run"],
         log_every_n_steps=50,
         benchmark=True,
         deterministic=False,
-        resume_from_checkpoint=train_config["ckpt_path"] if restart else None,
-        amp_backend='native',
-        terminate_on_nan=True,
+        detect_anomaly=False,
         callbacks=[checkpoint_callback]
     )
-    trainer.fit(model, datamodule=data_module)
+    trainer.fit(model, datamodule=data_module, ckpt_path=train_config["ckpt_path"] if restart else None)
 
 
 class LinearFinetune(pl.LightningModule):
 
     def __init__(self, patch_size: int, num_classes: int, lr: float, input_size: int, spatial_res: int, val_iters: int,
-                 drop_at: int, arch: str, arch_version:str=None, head_type: str = None, decay_rate: float = 0.1, ignore_index: int = 255):
+                 drop_at: int, arch: str, arch_version:str=None, head_type: str = None, decay_rate: float = 0.1, ignore_index: int = 255,
+                 num_register_tokens=0
+                 ):
         super().__init__()
+        if type(num_register_tokens) == tuple or type(num_register_tokens) == list:
+            num_register_tokens = num_register_tokens[0]
         self.save_hyperparameters()
         if 'vit' in arch:
             # Init Model
@@ -220,7 +240,10 @@ class LinearFinetune(pl.LightningModule):
                     model_func = vit_large_v2
                 else:                
                     model_func = vit_large
-            self.model = model_func(patch_size=patch_size)
+            extra_args = {}
+            if arch_version == 'v2':
+                extra_args['num_register_tokens'] = num_register_tokens
+            self.model = model_func(patch_size=patch_size, **extra_args)
         elif arch=='resnet50':
             backbone = resnet.__dict__[arch](pretrained=False)
             self.model = ResnetDilated(backbone)
@@ -280,7 +303,7 @@ class LinearFinetune(pl.LightningModule):
         return loss
 
     def validation_step(self, batch: Tuple[torch.Tensor, torch.Tensor], batch_idx: int):
-        if batch_idx < self.val_iters:
+        if self.val_iters is None or batch_idx < self.val_iters:
             with torch.no_grad():
                 imgs, masks = batch
                 bs = imgs.size(0)
@@ -301,7 +324,7 @@ class LinearFinetune(pl.LightningModule):
                 # update metric
                 self.miou_metric.update(gt[valid], mask_preds[valid])
 
-    def validation_epoch_end(self, outputs: List[Any]):
+    def on_validation_epoch_end(self) -> None:
         miou = self.miou_metric.compute(True, many_to_one=False, linear_probe=True)[0]
         self.miou_metric.reset()
         print(miou)

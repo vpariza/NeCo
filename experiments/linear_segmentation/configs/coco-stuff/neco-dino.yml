@@ -1,0 +1,26 @@
+num_workers: 12
+gpus: 1
+
+tags: "finetune_linear"
+log_status: "online"
+
+data:
+  data_dir: "<path to the directory containing the coco-stuff dataset>"
+  dataset_name: "coco-stuff"
+  size_crops: 448
+
+train:
+  head_type: 'lc'
+  method: 'ours' # use 'custom' if the checkpoint is the teacher/model weights or 'ours' if the checkpoint is the pytorch lightning checkpoint
+  arch: 'vit-small'
+  arch_version: 'v1'
+  batch_size: 128
+  val_iters: 512
+  restart: False
+  ckpt_path: "<PATH TO THE CHECKPOINT OF NeCo>"
+  ckpt_dir: "<PATH TO A DIRECTORY TO STORE THE CHECKPOINTS>"
+  lr: 0.01
+  patch_size: 16
+  max_epochs: 25
+  drop_at: 20
+  fast_dev_run: False

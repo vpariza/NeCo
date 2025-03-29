@@ -90,12 +90,8 @@ class Block(nn.Module):
 
         def ffn_residual_func(x: Tensor) -> Tensor:
             return self.ls2(self.mlp(self.norm2(x)))
-        
-        # Add this 2 lines
-        # if return_attention:
-        #     return self.attn(self.norm1(x), return_attn=True)
 
-        # Adaptation for returing attentions
+        # Adaptation for returning attentions
         if return_attention:
             attn = self.attn(self.norm1(x), return_attn=True)
             

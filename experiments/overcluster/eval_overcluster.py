@@ -11,7 +11,7 @@ import torchvision.transforms as T
 import sacred
 
 from datetime import datetime
-from pytorch_lightning import Trainer
+from pytorch_lightning import Trainer, seed_everything
 from pytorch_lightning.loggers import NeptuneLogger
 from torchvision.transforms.functional import InterpolationMode
 from typing import List, Any, Tuple
@@ -57,17 +57,17 @@ def entry(config_path, seed, ckpt_path, method):
 def overcluster(_config, _run):
     # Init logger
     neptune_logger = NeptuneLogger(
-        offline=_config["log_status"] == 'offline',
         api_key=api_key,
-        project_name='<your project name>',
-        experiment_name=_run.experiment_info["name"],
-        params=pd.json_normalize(_config).to_dict(orient='records')[0],
+        mode="offline" if _config.get("log_status") == 'offline' else "async",
+        project="<your project name>",
+        name=_run.experiment_info["name"],
         tags=_config["tags"].split(','),
     )
     print("Config:")
     print(_config)
     data_config = _config["data"]
     val_config = _config["val"]
+    seed_everything(_config["seed"])
     input_size = data_config["size_crops"]
     num_seeds = val_config["num_seeds"]
 
@@ -148,7 +148,8 @@ def overcluster(_config, _run):
         spatial_res=int(spatial_res),
         num_seeds=num_seeds,
         ignore_index=ignore_index,
-        mask_eval_size=100
+        mask_eval_size=100,
+        num_register_tokens=val_config["num_register_tokens"] if "num_register_tokens" in val_config else 0,
     )
 
     # Optionally load weights
@@ -160,10 +161,10 @@ def overcluster(_config, _run):
     # Only do a validation loop to get embeddings
     trainer = Trainer(
         logger=neptune_logger,
-        gpus=_config["gpus"],
-        accelerator='ddp' if _config["gpus"] > 1 else None,
+        devices=_config["gpus"],
+        accelerator='cuda',
         fast_dev_run=val_config["fast_dev_run"],
-        terminate_on_nan=True,
+        detect_anomaly=False,
     )
     trainer.validate(model, datamodule=data_module)
 
@@ -171,8 +172,10 @@ def overcluster(_config, _run):
 class Overcluster(pl.LightningModule):
 
     def __init__(self, patch_size: int, num_classes: int, k: int, pca_dim: int, arch: str, spatial_res: int,
-                 num_seeds: int, mask_eval_size: int = 100, ignore_index: int = 25, arch_version='v1'):
+                 num_seeds: int, mask_eval_size: int = 100, ignore_index: int = 25, arch_version='v1', num_register_tokens=0):
         super().__init__()
+        if type(num_register_tokens) == tuple or type(num_register_tokens) == list:
+            num_register_tokens = num_register_tokens[0]
         self.save_hyperparameters()
 
         self.arch_version=arch_version
@@ -193,14 +196,15 @@ class Overcluster(pl.LightningModule):
                     model_func = vit_large_v2
                 else:                
                     model_func = vit_large
-            model = model_func(patch_size=patch_size)
-            self.model = model
-        elif arch == 'resnet50':
+            extra_args = {}
+            if arch_version == 'v2':
+                extra_args['num_register_tokens'] = num_register_tokens
+            self.model = model_func(patch_size=patch_size, **extra_args)
+        elif arch=='resnet50':
             backbone = resnet.__dict__[arch](pretrained=False)
             self.model = ResnetDilated(backbone)
-        elif arch == 'vit-base':
-            self.model = vit_base(patch_size=patch_size)
 
+        self.outputs = []
         self.arch = arch
         self.num_seeds = num_seeds
         self.spatial_res = spatial_res
@@ -226,12 +230,12 @@ class Overcluster(pl.LightningModule):
             masks *= 255
             if masks.size(3) != self.masks_eval_size:
                 masks = F.interpolate(masks, size=(self.masks_eval_size, self.masks_eval_size), mode='nearest')
-            return tokens.cpu(), masks.cpu()
+            self.outputs.append((tokens.cpu(), masks.cpu()))
 
-    def validation_epoch_end(self, outputs: List[Any]):
+    def on_validation_epoch_end(self):
         print("collected data")
-        tokens = torch.cat([out[0].cpu() for out in outputs])
-        masks = torch.cat([out[1].cpu() for out in outputs])
+        tokens = torch.cat([out[0].cpu() for out in self.outputs])
+        masks = torch.cat([out[1].cpu() for out in self.outputs])
         print(f"Start normalization")
         normalized_feats = normalize_and_transform(tokens, self.pca_dim)
         clusterings = []
@@ -251,6 +255,7 @@ class Overcluster(pl.LightningModule):
                 results.append(metric.compute(True, many_to_one=True, precision_based=True)[0])
         print(results)
         print(np.mean(results))
+        self.outputs = []
 
 
 if __name__ == "__main__":

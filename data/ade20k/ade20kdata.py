@@ -7,6 +7,7 @@ from torch.utils.data import DataLoader, Dataset
 from typing import Optional
 
 from PIL import Image
+import torchvision.transforms.functional as F
 
 class Ade20kDataModule(pl.LightningDataModule):
 

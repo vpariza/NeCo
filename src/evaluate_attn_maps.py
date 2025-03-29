@@ -65,8 +65,8 @@ class EvaluateAttnMaps(pl.callbacks.Callback):
             jacs_all_heads /= len(self.dataset)
             print(f"Merged Jaccard on VOC12: {jacs_merged_attn.item()}")
             print(f"All heads Jaccard on VOC12: {jacs_all_heads.item()}")
-            pl_module.logger.experiment.log_metric('attn_jacs_voc', jacs_merged_attn.item())
-            pl_module.logger.experiment.log_metric('all_heads_jacs_voc', jacs_all_heads.item())
+            pl_module.logger.experiment['attn_jacs_voc'].append(jacs_merged_attn.item())
+            pl_module.logger.experiment['all_heads_jacs_voc'].append(jacs_all_heads.item())
 
     def evaluate_best_head(self, attentions: torch.Tensor, bs: int, w_featmap: int, h_featmap: int, patch_size: int,
                            maps: torch.Tensor) -> torch.Tensor:
@@ -129,7 +129,7 @@ class EvaluateAttnMaps(pl.callbacks.Callback):
             for k in range(1, np.max(labelled) + 1):
                 mask = labelled == k
                 if np.sum(mask) <= 2:
-                    th_attn[j, 0][mask] = 0
+                    th_attn[j, 0][mask.squeeze()] = 0
 
         # interpolate
         th_attn = nn.functional.interpolate(th_attn, scale_factor=patch_size, mode="nearest").cpu().numpy()

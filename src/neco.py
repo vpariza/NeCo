@@ -11,11 +11,11 @@ from torch import nn as nn
 from torch.optim.lr_scheduler import CosineAnnealingLR
 from torch.optim.optimizer import Optimizer
 from torchvision.ops import roi_align
-from typing import Callable, Optional, List, Any, Iterator, Tuple, Dict
+from typing import Callable, Optional, List, Any, Iterator, Tuple, Dict, Union
 
 from experiments.utils import PredsmIoUKmeans, process_attentions, cosine_scheduler
 from src.models.vit import vit_small, vit_base, vit_large
-from src.models.vit_v2 import vit_small as vit_small_v2, vit_base as vit_base_v2, vit_large as vit_large_v2
+from src.models.vit_v2 import vit_small as vit_small_v2, vit_base as vit_base_v2, vit_large as vit_large_v2, vit_giant as vit_giant_v2
 
 from diffsort import DiffSortNet
 import re
@@ -31,7 +31,7 @@ class NeCo(pl.LightningModule):
                  exclude_norm_bias: bool = True, optimizer: str = 'adam', num_nodes: int = 1,
                  patch_size: int = 16, roi_align_kernel_size: int = 7, val_downsample_masks: bool = True,
                  arch: str = 'vit-small', student_steepness=5, teacher_steepness=None, 
-                 arch_version = 'v1', grad_norm_clipping=None,
+                 arch_version = 'v1', grad_norm_clipping=None, num_register_tokens=0,
                  sort_net='bitonic', trainable_blocks= None,
                  is_queue_usable=True, sim_dist='euclidean'):
         """
@@ -75,6 +75,7 @@ class NeCo(pl.LightningModule):
         :param teacher_steepness: steepness of teacher network for sorting. If None, student_steepness is used.
         :param arch_version: version of architecture to be used. Currently supports 'v1' and 'v2'.
         :param grad_norm_clipping: gradient norm clipping value. If None, no clipping is applied.
+        :param num_register_tokens: number of registers to use in case of using v2 architecture and want to use the registers as in dinov2r
         """
         super().__init__()
         self.save_hyperparameters()
@@ -107,6 +108,7 @@ class NeCo(pl.LightningModule):
         self.grad_norm_clipping = grad_norm_clipping
         self.sort_net = sort_net
         self.entries_in_queue = 0
+        self.num_register_tokens = num_register_tokens if num_register_tokens is not None else 0
 
         # diff sorting params
         self.student_steepness = student_steepness
@@ -157,18 +159,28 @@ class NeCo(pl.LightningModule):
                 model_func = vit_large_v2
             else:                
                 model_func = vit_large
+        elif self.arch == 'vit-giant':
+            if self.arch_version == 'v2':
+                model_func = vit_giant_v2
+            else:                
+                raise ValueError(f"{self.arch} is not supported for version v1.")
         else:
             raise ValueError(f"{self.arch} is not supported")
+        extra_args = {}
+        if self.arch_version == 'v2':
+            extra_args['num_register_tokens'] = self.num_register_tokens
         if self.use_teacher:
             self.teacher = model_func(patch_size=self.patch_size,
                                       output_dim=self.projection_feat_dim,
                                       hidden_dim=self.projection_hidden_dim,
-                                      n_layers_projection_head=self.n_layers_projection_head)
+                                      n_layers_projection_head=self.n_layers_projection_head,
+                                      **extra_args)
         return model_func(patch_size=self.patch_size,
                          drop_path_rate=0.1,
                          output_dim=self.projection_feat_dim,
                          hidden_dim=self.projection_hidden_dim,
-                         n_layers_projection_head=self.n_layers_projection_head)
+                         n_layers_projection_head=self.n_layers_projection_head,
+                         **extra_args)
 
     def on_train_epoch_start(self):
         # Init queue if queue is None
@@ -270,10 +282,13 @@ class NeCo(pl.LightningModule):
         return [{'params': params, 'weight_decay': weight_decay, 'lr': lr},
                 {'params': excluded_params, 'weight_decay': 0., 'lr': lr}]
 
-    def optimizer_step(self, epoch: int = None, batch_idx: int = None, optimizer: Optimizer = None,
-                       optimizer_idx: int = None, optimizer_closure: Optional[Callable] = None,
-                       on_tpu: bool = None, using_native_amp: bool = None, using_lbfgs: bool = None,):
-
+    def optimizer_step(
+        self,
+        epoch: int,
+        batch_idx: int,
+        optimizer: Union[Optimizer, LightningOptimizer],
+        optimizer_closure: Optional[Callable[[], Any]] = None,
+    ):
         if self.grad_norm_clipping is not None:
             params = []
             for name, param in self.model.named_parameters():
@@ -294,7 +309,7 @@ class NeCo(pl.LightningModule):
 
         if not isinstance(optimizer, LightningOptimizer):
             # wraps into LightingOptimizer only for running step
-            optimizer = LightningOptimizer._to_lightning_optimizer(optimizer, self.trainer, optimizer_idx)
+            optimizer = LightningOptimizer._to_lightning_optimizer(optimizer, self.trainer.strategy)
         optimizer.step(closure=optimizer_closure)
 
     def shared_step(self, batch: Tuple[List[torch.Tensor], Dict]) -> float:
@@ -538,7 +553,7 @@ class NeCo(pl.LightningModule):
                                                                                    res_w, res_w)
                 self.preds_miou_layer4.update(valid, backbone_embeddings, gt)
 
-    def validation_epoch_end(self, outputs: List[Any]) -> None:
+    def on_validation_epoch_end(self) -> None:
         # Trigger computations for rank 0 process
         res_kmeans = self.preds_miou_layer4.compute(self.trainer.is_global_zero)
         self.preds_miou_layer4.reset()
@@ -546,14 +561,12 @@ class NeCo(pl.LightningModule):
             for k, name, res_k in res_kmeans:
                 miou_kmeans, tp, fp, fn, _, matched_bg = res_k
                 self.print(miou_kmeans)
-                self.logger.experiment.log_metric(f'K={name}_miou_layer4', round(miou_kmeans, 8))
+                self.logger.experiment[f'K={name}_miou_layer4'].append(round(miou_kmeans, 8))
                 # Log precision and recall values for each class
                 for i, (tp_class, fp_class, fn_class) in enumerate(zip(tp, fp, fn)):
                     class_name = self.trainer.datamodule.class_id_to_name(i)
-                    self.logger.experiment.log_metric(f'K={name}_{class_name}_precision',
-                                                      round(tp_class / max(tp_class + fp_class, 1e-8), 8))
-                    self.logger.experiment.log_metric(f'K={name}_{class_name}_recall',
-                                                      round(tp_class / max(tp_class + fn_class, 1e-8), 8))
+                    self.logger.experiment[f'K={name}_{class_name}_precision'].append(round(tp_class / max(tp_class + fp_class, 1e-8), 8))
+                    self.logger.experiment[f'K={name}_{class_name}_recall'].append(round(tp_class / max(tp_class + fn_class, 1e-8), 8))
                 if k > self.num_classes:
                     # Log percentage of clusters assigned to background class
-                    self.logger.experiment.log_metric(f'K={name}-percentage-bg-cluster', round(matched_bg, 8))
+                    self.logger.experiment[f'K={name}-percentage-bg-cluster'].append(round(matched_bg, 8))

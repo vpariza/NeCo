@@ -51,7 +51,7 @@ train:
   checkpoint_dir: "<PATH TO THE DIRECTORY TO STORE CHECKPOINTS>"
   checkpoint: null
   only_load_weights: True
-  student_steepness: 80
+  student_steepness: 100
   teacher_steepness: 100
   grad_norm_clipping: null
   sort_net: 'bitonic'
