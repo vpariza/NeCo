@@ -264,7 +264,7 @@ Each evaluation method has specific configuration files and command-line argumen
 
 ## Datasets
 
-We use PyTorch Lightning data modules for our datasets. Supported datasets include ImageNet100k, COCO, Pascal VOC, and ADE20k. Each dataset requires a specific folder structure for proper functioning.
+We use PyTorch Lightning data modules for our datasets. Supported datasets include ImageNet100k, COCO, Pascal VOC, ADE20k, and Cityscapes. Each dataset requires a specific folder structure for proper functioning.
 
 Data modules are located in the `data/` directory and handle loading, preprocessing, and augmentation. When using these datasets, ensure you update the paths in your configuration files to match your local setup.
 
