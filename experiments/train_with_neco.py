@@ -44,15 +44,16 @@ def entry_script(config_path, seed):
 @ex.capture
 def finetune_with_spatial_loss(_config, _run):
     # Setup logging
-    print("Online mode")
     neptune_logger = NeptuneLogger(
         api_key=api_key,
-        offline_mode=_config["log_status"] == 'offline' if _config.get("log_status") else True,
-        project_name="<Your Project Name>",
-        experiment_name=_run.experiment_info["name"],
-        params=pd.json_normalize(_config).to_dict(orient='records')[0],
+        mode="offline" if _config.get("log_status") == 'offline' else "async",
+        project="<Your Project Name>",
+        name=_run.experiment_info["name"],
         tags=_config["tags"].split(','),
     )
+
+    params=pd.json_normalize(_config).to_dict(orient='records')[0]
+    neptune_logger.experiment["parameters"]=params
 
     # Process config
     print("Config:")
@@ -231,6 +232,7 @@ def finetune_with_spatial_loss(_config, _run):
         trainable_blocks=train_config["trainable_blocks"] if "trainable_blocks" in train_config else None,
         sim_dist=train_config["sim_dist"] if "sim_dist" in train_config else None,
         is_queue_usable=train_config["is_queue_usable"] if "is_queue_usable" in train_config else False, # using a queue to stabilize finding neighbors from, not necessary
+        num_register_tokens=train_config["num_register_tokens"] if "num_register_tokens" in train_config else 0,
     )
 
     # Optionally load weights
@@ -263,12 +265,15 @@ def finetune_with_spatial_loss(_config, _run):
         dirpath=os.path.join(checkpoint_dir,'all_ckps'),
         save_top_k=-1,
         verbose=True,
-        save_on_train_epoch_end=False
+        save_on_train_epoch_end=True
     )
+    eval_attn_maps=train_config["eval_attn_maps"] if "eval_attn_maps" in train_config else False,
     callbacks = [checkpoint_callback]
-    eval_attn = EvaluateAttnMaps(voc_root=data_config["voc_data_path"], train_input_height=data_config["size_crops"][0],
-                                 attn_batch_size=train_config["batch_size"] * 4, num_workers=_config["num_workers"])
-    callbacks.append(eval_attn)
+
+    if eval_attn_maps == True:
+        eval_attn = EvaluateAttnMaps(voc_root=data_config["voc_data_path"], train_input_height=data_config["size_crops"][0],
+                                    attn_batch_size=train_config["batch_size"] * 4, num_workers=_config["num_workers"])
+        callbacks.append(eval_attn)
 
     # Used if train data is small as for pvoc
     val_every_n_epochs = train_config.get("val_every_n_epochs")
@@ -280,22 +285,19 @@ def finetune_with_spatial_loss(_config, _run):
         check_val_every_n_epoch=val_every_n_epochs,
         logger=neptune_logger,
         max_epochs=train_config["max_epochs"],
-        gpus=_config["gpus"],
-        accelerator='ddp' if _config["gpus"] > 1 else None,
+        devices=_config["gpus"],
+        accelerator='cuda', 
         fast_dev_run=train_config["fast_dev_run"],
         log_every_n_steps=50,
         benchmark=True,
         deterministic=False,
-        amp_backend='native',
-        num_sanity_val_steps=0, # train_config['val_iters'],
-        resume_from_checkpoint=train_config['checkpoint'] if not train_config["only_load_weights"] else None,
-        terminate_on_nan=True,
+        num_sanity_val_steps=train_config["num_sanity_val_steps"] if "num_sanity_val_steps" in train_config else 0, 
+        detect_anomaly=False, # Conversion from terminate_on_nan to detect_anomaly in newer versions of pytorch lightning
         callbacks=callbacks
     )
-    # trainer.validate(model, val_data_module)
-    trainer.fit(model, datamodule=data_module)
+    trainer.fit(model, datamodule=data_module, ckpt_path=train_config['checkpoint'] if not train_config["only_load_weights"] else None)
 
 
 if __name__ == '__main__':
     entry_script()
-                             
+

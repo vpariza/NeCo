@@ -1,0 +1,60 @@
+# exp1
+num_workers: 20
+gpus: 1
+log_status: 'online' # set to online to log to neptune, or offline for local development
+tags: "NeCo"
+
+data:
+  data_dir: "<PATH TO THE DATASET DIRECTORY>"
+  dataset_name: "coco" # possible options are "coco", "imagenet100k", "coco, imagenet100k","voc"
+  size_crops: [224, 98] # [224, 96]
+  jitter_strength: 1.0
+  blur_strength: 1.0
+  min_scale_crops: [0.25, 0.05]
+  max_scale_crops: [1., 0.25]
+  min_intersection_crops: 0.01
+  nmb_samples: [2, 4]
+  size_crops_val: 448 # Crops size for validation and seg maps viz
+  num_classes_val: 21
+  voc_data_path: "<PATH TO THE PASCAL VOC DATASET DIRECTORY>"
+
+train:
+  use_teacher: True
+  roi_align_kernel_size: 7
+  momentum_teacher: 0.9995
+  momentum_teacher_end: 1.
+  exclude_norm_bias: True
+  arch: 'vit-small'
+  arch_version: 'v1'
+  patch_size: 16
+  pretrained_weights: 'timetuning'
+  projection_feat_dim: 256      # dim after projection head
+  projection_hidden_dim: 2048
+  n_layers_projection_head: 3
+  queue_length: 8192
+  loss_mask: 'all'  # loss mask to use, options are 'all', 'fg', 'bg'
+  batch_size: 45     # effective batch size is bs * gpus * res_w ** 2
+  val_batch_size: 32
+  max_epochs: 50
+  crops_for_assign: [0, 1] # num items should be num of global crops
+  optimizer: 'adamw'
+  lr_backbone: 0.00001
+  lr_heads: 0.0001
+  final_lr: 0.
+  weight_decay: 0.04
+  weight_decay_end: 0.5
+  fast_dev_run: False
+  num_clusters_kmeans_miou: [500, 300, 21]
+  val_downsample_masks: True
+  val_iters: 20 # cover only 20 validation iterations, speeds valication the smaller it is
+  save_checkpoint_every_n_epochs: 1
+  checkpoint_dir: "<PATH TO THE DIRECTORY TO STORE CHECKPOINTS>"
+  checkpoint: null
+  only_load_weights: True
+  student_steepness: 100
+  teacher_steepness: 100
+  grad_norm_clipping: null
+  sort_net: 'bitonic'
+  trainable_blocks: null
+  sim_dist: 'cosine'
+  num_register_tokens: 0

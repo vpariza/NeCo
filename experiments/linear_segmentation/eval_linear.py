@@ -11,9 +11,13 @@ from data.VOCdevkit.vocdata import VOCDataModule
 from data.coco.coco_data_module import CocoDataModule
 from experiments.utils import PredsmIoU, get_backbone_weights
 from src.models.vit import vit_small, vit_base, vit_large
-from src.models.vit_v2 import vit_small as vit_small_v2, vit_base as vit_base_v2, vit_large as vit_large_v2
+from src.models.vit_v2 import vit_small as vit_small_v2, vit_base as vit_base_v2, vit_large as vit_large_v2, vit_giant as vit_giant_v2
 from src.models.resnet import ResnetDilated
+from src.linear_finetuning_transforms import SepTransforms
 
+from data.cityscapes.cityscapes_data import CityscapesDataModule
+from data.ade20k.ade20kdata import Ade20kDataModule
+import random
 
 @click.command()
 @click.option("--ckpt_path_backbone", type=str, required=True)
@@ -28,9 +32,10 @@ from src.models.resnet import ResnetDilated
 @click.option("--input_size", type=int, default=448)
 @click.option("--mask_eval_size", type=int, default=448)
 @click.option("--arch_version", type=int, default='v1')
+@click.option("--num_register_tokens", type=int, default=0)
 def eval_bulk(ckpt_path_backbone: str, ckpt_path_head: str, patch_size: int, arch: str, num_classes: int,
               head_type: str, dataset_name: str, data_dir: str, batch_size: int, input_size: int, mask_eval_size: int,
-              arch_version:str):
+              arch_version:str, num_register_tokens:int):
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     miou_metric = PredsmIoU(num_classes, num_classes)
 
@@ -49,12 +54,20 @@ def eval_bulk(ckpt_path_backbone: str, ckpt_path_head: str, patch_size: int, arc
             model_func = vit_large_v2
         else:                
             model_func = vit_large
+    elif arch == 'vit-giant':
+        if arch_version == 'v2':
+            model_func = vit_giant_v2
+        else:                
+            raise ValueError(f"{arch} is not supported for version v1.")
     elif arch == "resnet":
         backbone = resnet.__dict__[arch](pretrained=False)
         model = ResnetDilated(backbone)
     else:
         raise ValueError(f"{arch} not supported as model")
-    model = model_func(patch_size=patch_size)
+    extra_args = {}
+    if arch_version == 'v2':
+        extra_args['num_register_tokens'] = num_register_tokens
+    model = model_func(patch_size=patch_size, **extra_args)
 
     finetune_head = nn.Conv2d(model.embed_dim, num_classes, 1)
 
@@ -82,6 +95,8 @@ def eval_bulk(ckpt_path_backbone: str, ckpt_path_head: str, patch_size: int, arc
                                        T.ToTensor()])
 
     if dataset_name == "voc":
+        num_classes = 21
+        ignore_index = 255
         data_module = VOCDataModule(batch_size=batch_size,
                                     num_workers=5,
                                     train_split="trainaug",
@@ -94,8 +109,20 @@ def eval_bulk(ckpt_path_backbone: str, ckpt_path_head: str, patch_size: int, arc
     elif "coco" in dataset_name:
         assert len(dataset_name.split("-")) == 2
         mask_type = dataset_name.split("-")[-1]
-        file_list = os.listdir(os.path.join(data_dir, "coco", "images", "train2017"))
-        file_list_val = os.listdir(os.path.join(data_dir, "coco", "images", "val2017"))
+        assert mask_type in ["thing", "stuff"]
+        if mask_type == "thing":
+            num_classes = 12
+        else:
+            num_classes = 15
+        ignore_index = 255
+        file_list = os.listdir(os.path.join(data_dir, "images", "train2017"))
+        file_list_val = os.listdir(os.path.join(data_dir, "images", "val2017"))
+        random.shuffle(file_list_val)
+        # sample 10% of train images
+        random.shuffle(file_list)
+        file_list = file_list[:int(len(file_list)*0.1)]
+        print(f"sampled {len(file_list)} COCO images for training")
+
         data_module = CocoDataModule(batch_size=batch_size,
                                      num_workers=5,
                                      file_list=file_list,
@@ -105,6 +132,27 @@ def eval_bulk(ckpt_path_backbone: str, ckpt_path_head: str, patch_size: int, arc
                                      train_transforms=val_image_transforms,
                                      val_transforms=val_image_transforms,
                                      val_target_transforms=val_target_transforms)
+
+    elif dataset_name == "ade20k":
+        num_classes = 151
+        ignore_index = 0
+        val_transforms = SepTransforms(val_image_transforms, val_target_transforms)
+        data_module = Ade20kDataModule(data_dir,
+                                        train_transforms=val_transforms,
+                                        val_transforms=val_transforms,
+                                        shuffle=False,
+                                        num_workers=5,
+                                        batch_size=batch_size)
+    elif dataset_name == "cityscapes":
+        num_classes = 19
+        ignore_index = 255
+        val_transforms = SepTransforms(val_image_transforms, val_target_transforms)
+        data_module = CityscapesDataModule(root=data_dir,
+                                           train_transforms=val_transforms,
+                                           val_transforms=val_transforms,
+                                           shuffle=True,
+                                           num_workers=5,
+                                           batch_size=batch_size)
     else:
         raise ValueError(f"{dataset_name} not supported as dataset")
 
@@ -127,7 +175,7 @@ def eval_bulk(ckpt_path_backbone: str, ckpt_path_head: str, patch_size: int, arc
             # downsample masks and preds
             gt = masks * 255
             gt = nn.functional.interpolate(gt, size=(mask_eval_size, mask_eval_size), mode='nearest')
-            valid = (gt != 255) # remove object boundary class
+            valid = (gt != ignore_index) # mask to remove object boundary class
 
             # update metric
             miou_metric.update(gt[valid].cpu(), mask_preds[valid].cpu())

@@ -1,0 +1,28 @@
+num_workers: 12
+gpus: 1
+log_status: 'offline'
+
+tags: "overclustering"
+
+data:
+  data_dir: "<PATH TO THE DATASET ROOT>"
+  dataset_name: "coco-stuff"
+  size_crops: 448
+
+val:
+  method: 'ours' # use 'custom' if the checkpoint is the teacher/model weights or 'ours' if the checkpoint is the pytorch lightning checkpoint
+  arch: 'vit-small'
+  arch_version: 'v1'  
+  batch_size: 32
+  restart: False
+  ckpt_path:  "<PATH TO CHECKPOINT>"
+  ckpt_dir: "<PATH TO DIRECTORY TO STORE CHECKPOINTS>"
+  patch_size: 16
+  fast_dev_run: False
+  val_downsample_masks: True
+  num_seeds: 5
+  size_masks: 100
+  val_iters: null
+  fast_dev_run: False
+  K: 15
+  pca_dim: 50

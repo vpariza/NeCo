@@ -57,3 +57,4 @@ train:
   sort_net: 'bitonic'
   trainable_blocks: null
   sim_dist: 'cosine'
+  num_register_tokens: 4

@@ -26,3 +26,4 @@ val:
   fast_dev_run: False
   K: 12
   pca_dim: 50
+  num_register_tokens: 0

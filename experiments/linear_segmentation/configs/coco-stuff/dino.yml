@@ -5,8 +5,8 @@ tags: "finetune_linear"
 log_status: "online"
 
 data:
-  data_dir: "<path to the directory containing the VOC dataset>"
-  dataset_name: "coco-stuff"
+  data_dir: "<path to the directory containing the cityscapes dataset>"
+  dataset_name: "cityscapes"
   size_crops: 448
 
 train:
@@ -21,6 +21,6 @@ train:
   ckpt_dir: "<PATH TO A DIRECTORY TO STORE THE CHECKPOINTS>"
   lr: 0.01
   patch_size: 16
-  max_epochs: 20
+  max_epochs: 25
   drop_at: 20
   fast_dev_run: False

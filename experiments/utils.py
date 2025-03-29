@@ -33,7 +33,7 @@ class PredsmIoU(Metric):
         :param num_pred_classes: The number of predicted classes.
         :param num_gt_classes: The number of gt classes.
         """
-        super().__init__(dist_sync_on_step=False, compute_on_step=False)
+        super().__init__(dist_sync_on_step=False)
         self.num_pred_classes = num_pred_classes
         self.num_gt_classes = num_gt_classes
         self.add_state("gt", [])
@@ -217,7 +217,7 @@ class PredsmIoUKmeans(PredsmIoU):
         :param num_gt_classes: number of ground-truth classes
         :param pca_dim: target dimensionality of PCA
         """
-        super(PredsmIoU, self).__init__(compute_on_step=False, dist_sync_on_step=False) # Init Metric super class
+        super(PredsmIoU, self).__init__(dist_sync_on_step=False) # Init Metric super class
         self.pca_dim = pca_dim
         self.num_pred_classes = clustering_granularities
         self.num_gt_classes = num_gt_classes
@@ -430,6 +430,9 @@ def get_backbone_weights(arch: str, method: str, patch_size: int = None,
         'vit-small16-timetuning': ("<PROVIDE YOUR PATH TO TIMETUNING CHECKPOINT>",
                              partial(torch.load, map_location=torch.device('cpu')),
                              lambda x: x),
+        'vit-small16-leopart': ("<PROVIDE YOUR PATH TO LEOPART CHECKPOINT>",
+                             partial(torch.load, map_location=torch.device('cpu')),
+                             lambda x: x),
         'vit-small8-dino': ("https://dl.fbaipublicfiles.com/dino/dino_deitsmall8_pretrain/dino_deitsmall8_pretrain_full_checkpoint.pth",
                              torch.hub.load_state_dict_from_url,
                              lambda x: x["teacher"]),               
@@ -563,7 +566,7 @@ def process_attentions(attentions: torch.Tensor, spatial_res: int, threshold: fl
         for k in range(1, np.max(labelled) + 1):
             mask = labelled == k
             if np.sum(mask) <= 2:
-                th_attn[j, 0][mask] = 0
+                th_attn[j, 0][mask.squeeze()] = 0
     return th_attn.detach()
 
 

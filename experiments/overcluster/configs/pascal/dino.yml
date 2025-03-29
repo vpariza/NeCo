@@ -10,7 +10,7 @@ data:
   size_crops: 448
 
 val:
-  method: 'ours'
+  method: 'dino'
   arch: 'vit-small'
   arch_version: 'v1'  
   batch_size: 32
@@ -24,5 +24,5 @@ val:
   size_masks: 100
   val_iters: null
   fast_dev_run: False
-  K: 12
+  K: 21
   pca_dim: 50
