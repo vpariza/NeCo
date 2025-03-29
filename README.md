@@ -1,16 +1,8 @@
-# Near, far: Patch-ordering enhances vision foundation models' scene understanding
+#  [`Near, far: Patch-ordering enhances vision foundation models' scene understanding`](https://arxiv.org/abs/2408.11054)
 
-**University of Amsterdam**
+*[Valentinos Pariza*](https://vpariza.github.io), [Mohammadreza Salehi*](https://smsd75.github.io),[Gertjan J. Burghouts](https://gertjanburghouts.github.io), [Francesco Locatello](https://www.francescolocatello.com/), [Yuki M. Asano](yukimasano.github.io)* 
 
-Valentinos Pariza*, 
-Mohammadreza Salehi*, 
-Gertjan Burghouts, 
-Francesco Locatello,
-Yuki M. Asano 
-
- [[`Paper`](https://arxiv.org/abs/2408.11054)] 
-
-
+🌐 **[Project Page](https://vpariza.github.io/NeCo/)** / ⌨️ **[GitHub Repository](https://github.com/vpariza/NeCo)** / 📄 **[Read the Paper on arXiv](https://arxiv.org/abs/2408.11054)**
 ## Table of Contents
 
 - [Introduction](#introduction)
