@@ -215,7 +215,7 @@ state_dict = torch.load(path_to_checkpoint)
 model.load_state_dict(state_dict, strict=False)
 ```
 ### Models after post-training dino or similar (following dino architecture)
-#### NeCo on Dinov2 with Registers
+#### Timm vit_small architectures
 ```python
 import torch
 from timm.models.vision_transformer import vit_small_patch16_224, vit_base_patch16_224
