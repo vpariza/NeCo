@@ -193,7 +193,9 @@ To use NeCo models on downstream dense prediction tasks, you just need to instal
 The models can be download from our [NeCo Hugging Face repo](https://huggingface.co/FunAILab/NeCo/tree/main).
 
 ### Models after post-training dinov2 (following dinov2 architecture)
-
+* Models that can be loaded with this approach can be found at the hugging face page:
+  * [vit-small models](https://huggingface.co/FunAILab/NeCo/tree/main/vit-small/dinov2-architectures)
+  * [vit-base models](https://huggingface.co/FunAILab/NeCo/tree/main/vit-base/dinov2-architectures)
 #### NeCo on Dinov2 
 ```python
 import torch
@@ -215,6 +217,9 @@ state_dict = torch.load(path_to_checkpoint)
 model.load_state_dict(state_dict, strict=False)
 ```
 ### Models after post-training dino or similar (following dino architecture)
+* Models that can be loaded with this approach can be found at the hugging face page:
+  * [vit-small models](https://huggingface.co/FunAILab/NeCo/tree/main/vit-small/dino-architectures)
+  * [vit-bas emodels](https://huggingface.co/FunAILab/NeCo/tree/main/vit-base/dino-architectures)
 #### Timm vit_small architectures
 ```python
 import torch
