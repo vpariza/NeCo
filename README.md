@@ -220,7 +220,7 @@ model.load_state_dict(state_dict, strict=False)
 * Models that can be loaded with this approach can be found at the hugging face page:
   * [vit-small models](https://huggingface.co/FunAILab/NeCo/tree/main/vit-small/dino-architectures)
   * [vit-bas emodels](https://huggingface.co/FunAILab/NeCo/tree/main/vit-base/dino-architectures)
-#### Timm vit_small architectures
+#### timm vit-small and vit-base architectures
 ```python
 import torch
 from timm.models.vision_transformer import vit_small_patch16_224, vit_base_patch16_224
