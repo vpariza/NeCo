@@ -17,6 +17,7 @@
 - [Dataset Preparation](#datasets)
 - [Visualizations](#visualizations)
 - [Citation](#citation)
+- [License](#license)
 
 ## News
 Thank you for using our code. Here we include news about changes in the repository.
@@ -315,6 +316,11 @@ If you find this repository useful, please consider giving a star ⭐ and citati
 }
 
 ```
+
+## License
+<a name="license"> </a>
+All our code is MIT license with the exception of DINOv2 related code that follows `Apache 2 license`.
+DINOv2 has an Apache 2 license [DINOv2](https://github.com/facebookresearch/dinov2/blob/main/LICENSE).
 
 #### Note: Our repository is developed by adopting and adapting multiple parts of the [Leopart](https://github.com/MkuuWaUjinga/leopart) model, as well as parts from other works like DINOv2, DINO, R-CNN, ...
 
